@@ -12,7 +12,8 @@
   "dependencies": {
     "chalk": "2.3.0",
     "clear": "0.0.1",
-    "figlet": "1.2.0"
+    "figlet": "1.2.0",
+    "inquirer": "5.0.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
