@@ -17,7 +17,8 @@
     "figlet": "1.2.0",
     "inquirer": "5.0.0",
     "lodash": "4.17.4",
-    "preferences": "1.0.2"
+    "preferences": "1.0.2",
+    "tty-table": "2.5.5"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
