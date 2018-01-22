@@ -10,13 +10,17 @@
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "dependencies": {
+    "@octokit/rest": "14.0.3",
     "chalk": "2.3.0",
     "clear": "0.0.1",
+    "clui": "0.3.6",
     "figlet": "1.2.0",
-    "inquirer": "5.0.0"
+    "inquirer": "5.0.0",
+    "preferences": "1.0.2"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1"
   }
 }
