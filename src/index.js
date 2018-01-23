@@ -2,9 +2,7 @@ import clear from 'clear'
 import chalk from 'chalk'
 import figlet from 'figlet'
 
-import { getGithubToken } from './github'
-import { getGithubRepositories, displayRepositories } from './list'
-import { clones } from './git'
+import { starter } from './questions'
 
 const main = async () => {
   clear()
@@ -15,13 +13,7 @@ const main = async () => {
   )
 
   try {
-    const token = await getGithubToken()
-
-    displayRepositories()
-
-    const githubRepositories = getGithubRepositories()
-
-   await clones(githubRepositories)
+    await starter()
   } catch (e) {
     console.log()
     console.warn(` ⚠️  ${e.message || e}`)

@@ -1,6 +1,8 @@
-import repos from '../list.json'
+import repos from '../../list.json'
 import { includes } from 'lodash'
 import Table from 'tty-table'
+
+import { getKonnectorLibsVersion } from './config'
 
 const REPO_REGEXP = /^https?:\/\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)$/
 const PROVIDER_GITHUB = 'github.com'
@@ -16,7 +18,7 @@ const parsingRepository = url => {
   }
 }
 
-const getRepositories = (provider = '') => {
+export const getRepositories = (provider = '') => {
   const list = []
 
   for (const repo of repos) {
@@ -36,7 +38,7 @@ export const getGitlabRepositories = () => {
   return getRepositories(PROVIDER_GITLAB)
 }
 
-export const displayRepositories = () => {
+export const displayRepositories = (infos) => {
   const header = [{
     value: 'provider',
     alias: 'Provider',
@@ -55,9 +57,14 @@ export const displayRepositories = () => {
     align: 'left',
     paddingLeft: 1,
     width: 50
+  }, {
+    value: 'libs',
+    alias: 'Konnector Libs',
+    align: 'left',
+    paddingLeft: 1,
+    width: 50
   }]
-  const body = getRepositories()
-  const t1 = Table(header, body, {
+  const t1 = Table(header, infos, {
     borderStyle : 1,
     paddingBottom : 0,
     headerAlign : 'center',
