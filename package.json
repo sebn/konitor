@@ -14,10 +14,13 @@
     "chalk": "2.3.0",
     "clear": "0.0.1",
     "clui": "0.3.6",
+    "configstore": "3.1.1",
     "figlet": "1.2.0",
+    "fs-extra": "5.0.0",
     "inquirer": "5.0.0",
     "lodash": "4.17.4",
-    "preferences": "1.0.2",
+    "mkdirp": "0.5.1",
+    "simple-git": "1.89.0",
     "tty-table": "2.5.5"
   },
   "devDependencies": {

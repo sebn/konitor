@@ -1,7 +1,8 @@
 import inquirer from 'inquirer'
-import Preferences from 'preferences'
 import CLI from 'clui'
 import octokit from '@octokit/rest'
+
+import { getGithubToken as getToken, setGithubToken } from './config'
 
 const github = octokit()
 
@@ -37,10 +38,10 @@ export const getGithubCredentials = async () => {
 }
 
 export const getGithubToken = async () => {
-  const prefs = new Preferences('cozy-konnector-monitor')
+  const config = getToken()
 
-  if (prefs.github && prefs.github.token) {
-    return prefs.github.token
+  if (config) {
+    return config
   }
 
   const credentials = await getGithubCredentials()
@@ -60,7 +61,7 @@ export const getGithubToken = async () => {
 
     const token = result.data && result.data.token
     if (token) {
-      prefs.github = { token }
+      setGithubToken(token)
       return token
     }
   } catch (e) {

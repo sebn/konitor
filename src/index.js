@@ -4,6 +4,7 @@ import figlet from 'figlet'
 
 import { getGithubToken } from './github'
 import { getGithubRepositories, displayRepositories } from './list'
+import { clones } from './git'
 
 const main = async () => {
   clear()
@@ -19,6 +20,8 @@ const main = async () => {
     displayRepositories()
 
     const githubRepositories = getGithubRepositories()
+
+   await clones(githubRepositories)
   } catch (e) {
     console.log()
     console.warn(` ⚠️  ${e.message || e}`)
