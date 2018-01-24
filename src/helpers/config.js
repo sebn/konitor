@@ -14,6 +14,12 @@ export const getConfigPath = async () => {
   return dir
 }
 
+export const getKonnectorPath = async (repoName) => {
+  const configPath = await getConfigPath()
+
+  return `${configPath}/${repoName}`
+}
+
 export const getGithubToken = () => {
   return conf.get('github.token')
 }
@@ -22,9 +28,10 @@ export const setGithubToken = token => {
   conf.set('github.token', token)
 }
 
-export const getKonnectorLibsVersion = async (dir) => {
-  const configPath = await getConfigPath()
-  const pkg = require(`${configPath}/${dir}/package.json`)
+export const setKonnectorField = (repoName, field, value) => {
+  conf.set(`konnector.${field}`, value)
+}
 
-  return pkg.dependencies['cozy-konnectors-libs']
+export const getKonnectorField = (repoName, field) => {
+  conf.get(`konnector.${field}`)
 }

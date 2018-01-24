@@ -2,8 +2,6 @@ import repos from '../../list.json'
 import { includes } from 'lodash'
 import Table from 'tty-table'
 
-import { getKonnectorLibsVersion } from './config'
-
 const REPO_REGEXP = /^https?:\/\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)$/
 const PROVIDER_GITHUB = 'github.com'
 const PROVIDER_GITLAB = 'gitlab.cozycloud.cc'

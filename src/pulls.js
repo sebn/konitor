@@ -1,16 +1,13 @@
 import CLI from 'clui'
 import { getGithubRepositories } from './helpers/list'
 import { pull } from './helpers/git'
-import { getConfigPath } from './helpers/config'
-
-const Spinner = CLI.Spinner
+import { getKonnectorPath } from './helpers/config'
 
 export const pulls = async () => {
   // TODO: replace by getRepositories() when Gitlab is available
   const repositories = getGithubRepositories()
   for (const { url, repoName } of repositories) {
-    const root = await getConfigPath()
-    const dir = `${root}/${repoName}`
+    const konnectorPath = await getKonnectorPath(repoName)
 
     const Spinner = CLI.Spinner
     const status = new Spinner(
@@ -18,7 +15,7 @@ export const pulls = async () => {
     )
     status.start()
 
-    const result = await pull(dir, url)
+    const result = await pull(konnectorPath, url)
 
     status.stop()
     console.log(` - ✅  ${repoName}: ${JSON.stringify(result.summary)}`)
