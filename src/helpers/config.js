@@ -28,10 +28,10 @@ export const setGithubToken = token => {
   conf.set('github.token', token)
 }
 
-export const setKonnectorField = (repoName, field, value) => {
-  conf.set(`konnector.${field}`, value)
+export const setKonnectorField = (slug, field, value) => {
+  conf.set(`konnector.${slug}.${field}`, value)
 }
 
-export const getKonnectorField = (repoName, field) => {
-  conf.get(`konnector.${field}`)
+export const getKonnectorField = (slug, field) => {
+  return conf.get(`konnector.${slug}.${field}`)
 }

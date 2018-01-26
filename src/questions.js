@@ -17,6 +17,18 @@ const selectKonnector = async () => {
   return answer
 }
 
+export const askKonnectorField = async (slug, field) => {
+  const message = `What's '${field}' for konnector '${slug}'?`
+  const question = {
+    type: field === 'password' ? 'password' : 'input',
+    name, message,
+    choices: getRepositories().map(info => info.repoName)
+  }
+  const answer = (await inquirer.prompt(question))[name]
+
+  return answer
+}
+
 export const starter = async () => {
   const message = 'What do you want to do?'
   const aPulls = 'Pull all konnectors'
