@@ -7,12 +7,12 @@ export const selectKonnector = async (konnectors) => {
   const message = 'Which konnector do you want to test?'
   const question = {
     type: 'list', name, message,
-    choices: konnectors.map(k => k.slug === undefined ? k.repoName : k.slug)
+    choices: konnectors.map(k => k.slug === undefined ? k.repoName : k.slug)
   }
   const answer = (await inquirer.prompt(question))[name]
   console.log()
 
-  return find(konnectors, k => k.slug === answer || k.repoName === answer)
+  return find(konnectors, k => k.slug === answer || k.repoName === answer)
 }
 
 export const askKonnectorField = async (slug, field) => {

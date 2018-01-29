@@ -1,79 +1,44 @@
-import clear from 'clear'
-import chalk from 'chalk'
-import figlet from 'figlet'
-import inquirer from 'inquirer'
+import yargs from 'yargs'
+import { version } from '../package.json'
+import { displayLogo } from './helpers/logo'
 
+import { interactive } from './interactive'
 import { pulls } from './pulls'
-import { testKonnector } from './test'
+import { testKonnector } from './test'
+import { getKonnector, getKonnectors } from './list'
 
-import { getKonnectorPath } from './helpers/config'
-import { getSlug } from './helpers/manifest'
-import { getGithubRepositories } from './helpers/list'
+displayLogo()
 
-const starter = async (konnectors) => {
-  const name = 'name'
-  const message = 'What do you want to do?'
-
-  const aPulls = 'Pull all konnectors'
-  const aTest = 'Test a konnector'
-  const aQuit = 'Quit'
-
-  const question = {
-    type: 'list', name, message,
-    choices: [aTest, aPulls, aQuit]
-  }
-
-  let answer
-  while (answer !== aQuit) {
-    console.log()
-    answer = (await inquirer.prompt(question))[name]
-    console.log()
-
-    switch (answer) {
-      case aPulls:
-        await pulls(konnectors)
-        break;
-      case aTest:
-        await testKonnector(konnectors)
-        break;
+yargs
+  .version()
+  .usage('Usage: $0 <command> [options]')
+  .command({
+    command: 'pulls',
+    desc: 'Pull all konnectors',
+    handler: async () => {
+      console.log(`\nPull all konnectors:\n`)
+      const konnectors = await getKonnectors()
+      await pulls(konnectors)
+      console.log()
     }
-  }
-}
-
-const getKonnectors = async () => {
-  const konnectors = await getGithubRepositories()
-
-  for (const konnector of konnectors) {
-    const path = await getKonnectorPath(konnector.repoName)
-    konnector.path = path
-    try {
-      const slug = await getSlug(path)
-      konnector.slug = slug
-    } catch (e) {
-      // this project are not yet downloaded
+  })
+  .command({
+    command: 'test <name>',
+    desc: 'Test a konnector',
+    handler: async ({ name }) => {
+      console.log(`\nTest konnector ${name}:\n`)
+      const konnector = await getKonnector(name)
+      await testKonnector(konnector)
+      console.log()
     }
-  }
-
-  return konnectors
-}
-
-const main = async () => {
-  clear()
-  console.log(
-    chalk.yellow(
-      figlet.textSync('Monitor', { horizontalLayout: 'full' })
-    )
-  )
-
-  const konnectors = await getKonnectors()
-
-  try {
-    await starter(konnectors)
-  } catch (e) {
-    console.log()
-    console.warn(` ⚠️  ${e.message || e}`)
-    console.log()
-  }
-}
-
-main()
+  })
+  .command({
+    command: 'interactive',
+    aliases: ['$0'],
+    desc: 'Launch interactive mode',
+    handler: async () => {
+      await interactive()
+    }
+  })
+  .locale('en')
+  .argv

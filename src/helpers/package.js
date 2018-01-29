@@ -16,7 +16,7 @@ const getVersion = async (path) => {
 const getLibVersion = async (path, lib) => {
   const pkg = await getPackage(path)
 
-  return pkg.dependencies[lib] || pkg.devDependencies[lib]
+  return pkg.dependencies[lib] || pkg.devDependencies[lib]
 }
 
 export const hasCmd = async (path, cmd) => {

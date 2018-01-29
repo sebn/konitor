@@ -2,7 +2,7 @@ import inquirer from 'inquirer'
 import CLI from 'clui'
 import octokit from '@octokit/rest'
 
-import { getGithubToken as getToken, setGithubToken } from './config'
+import { getGithubToken as getToken, setGithubToken } from './config'
 
 const github = octokit()
 

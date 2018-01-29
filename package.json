@@ -21,7 +21,8 @@
     "lodash": "4.17.4",
     "mkdirp": "0.5.1",
     "simple-git": "1.89.0",
-    "tty-table": "2.5.5"
+    "tty-table": "2.5.5",
+    "yargs": "11.0.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",

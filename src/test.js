@@ -1,14 +1,13 @@
 import { getKonnectorField, setKonnectorField } from './helpers/config'
 import { hasCmd, launchCmd, getMain } from './helpers/package'
 import { getFields, getSlug } from './helpers/manifest'
-import { selectKonnector, askKonnectorField } from './helpers/questions'
 import { getFilesFromDir } from './helpers/filesystem'
+import { askKonnectorField } from './helpers/questions'
 import { pull } from './pulls'
 import fs from 'fs-extra'
 import { includes } from 'lodash'
 
-export const testKonnector = async (konnectors) => {
-  const konnector = await selectKonnector(konnectors)
+export const testKonnector = async (konnector) => {
   const { path, url, repoName } = konnector
 
   // up to date
