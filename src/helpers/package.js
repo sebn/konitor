@@ -25,17 +25,21 @@ export const hasCmd = async (path, cmd) => {
   return !!pkg.scripts[cmd]
 }
 
-export const launchCmd = async (path, cmd, spinnerMsg) => {
+export const launchCmd = async (path, params, spinnerMsg) => {
   return new Promise(async (resolve) => {
     const Spinner = CLI.Spinner
     const status = new Spinner(spinnerMsg)
     status.start()
 
-    const cmd = await spawn('yarn', cmd, { cwd: path, encoding: 'utf8' })
+    const result = {stdout: [], stderr: []}
+    const cmd = await spawn('yarn', params, { cwd: path, encoding: 'utf8' })
+    cmd.stdout.on('data', data => result.stdout.push(data.toString()))
+    cmd.stderr.on('data', data => result.stderr.push(data))
 
     cmd.on('close', (code) => {
+      result.code = code
       status.stop()
-      resolve()
+      resolve(result)
     })
   })
 }

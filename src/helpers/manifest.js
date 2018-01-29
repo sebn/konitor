@@ -1,18 +1,13 @@
 import fs from 'fs-extra'
 
-const loadJSON = (file) => {
-    var data = fs.readFileSync(file);
-    return JSON.parse(data);
-}
-
-export const getManifest = (path) => {
-  const manifest = loadJSON(`${path}/manifest.konnector`)
+export const getManifest = async (path) => {
+  const manifest = await fs.readJson(`${path}/manifest.konnector`)
 
   return manifest
 }
 
-export const getFields = (path) => {
-  const manifest = getManifest(path)
+export const getFields = async (path) => {
+  const manifest = await getManifest(path)
 
   return manifest.fields
     && manifest.fields.account
@@ -20,8 +15,8 @@ export const getFields = (path) => {
     && manifest.fields.account.accountFormat.split(',')
 }
 
-export const getSlug = (path) => {
-  const manifest = getManifest(path)
+export const getSlug = async (path) => {
+  const manifest = await getManifest(path)
 
   return manifest.slug
 }

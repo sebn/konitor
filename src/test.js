@@ -1,34 +1,68 @@
-import CLI from 'clui'
-import { spawn } from 'child_process'
-import { getKonnectorPath, getKonnectorField, setKonnectorField } from './helpers/config'
-import { hasCmd, launchCmd } from './helpers/package'
+import { getKonnectorField, setKonnectorField } from './helpers/config'
+import { hasCmd, launchCmd, getMain } from './helpers/package'
 import { getFields, getSlug } from './helpers/manifest'
-import { askKonnectorField } from './questions'
+import { selectKonnector, askKonnectorField } from './helpers/questions'
+import { getFilesFromDir } from './helpers/filesystem'
+import { pull } from './pulls'
+import fs from 'fs-extra'
+import { includes } from 'lodash'
 
-export const testKonnector = async (repoName) => {
-  const path = await getKonnectorPath(repoName)
+export const testKonnector = async (konnectors) => {
+  const konnector = await selectKonnector(konnectors)
+  const { path, url, repoName } = konnector
 
+  // up to date
+  await pull(konnector)
+  console.log(` - ✅  repository is up to date.`)
+
+  // dependencies
   await launchCmd(path, ['install'], `Install dependencies of ${repoName}, please wait...`)
   console.log(` - ✅  dependencies is installed.`)
 
+  // clean
   const hasCleanCmd = await hasCmd(path, 'clean')
   if (hasCleanCmd) {
     await launchCmd(path, ['clean'], `Clean repository, please wait...`)
     console.log(` - ✅  repository is clean.`)
   }
 
-  const fields = getFields(path)
-  const slug = getSlug(path)
-  for (const field of fields) {
-    if (!getKonnectorField(slug, field)) {
-      const value = await askKonnectorField(slug, field)
+  // create credentials
+  const slug = await getSlug(path)
+  const fieldsFromManifest = await getFields(path)
+  const fields = {}
+  for (const field of fieldsFromManifest) {
+    let value = getKonnectorField(slug, field)
+    if (!value) {
+      value = await askKonnectorField(slug, field)
       setKonnectorField(slug, field, value)
     }
+    fields[field] = value
   }
 
-  // get fields from https://raw.githubusercontent.com/cozy/cozy-collect/master/src/config/konnectors.json
-  // check fields
-  // ask fields if is not here
-  // launch yarn standalone
-  // test if pdf
+  // create file with credentials
+  const template = { COZY_URL: 'http://cozy.tools:8080', fields }
+  fs.writeFileSync(`${path}/konnector-dev-config.json`, JSON.stringify(template, null, '  '))
+
+  // Launch standalone test
+  const result = await launchCmd(path, ['standalone'], `Launch test, please wait...`)
+
+  // Test
+  if (includes(result.stdout.join(', '), 'Correctly logged in')) {
+    console.log(` - ✅  Correctly logged in.`)
+  } else {
+    console.log(` - ⚠️  Login failed.`)
+  }
+  const files = await getFilesFromDir(path, 'PDF')
+  if (files.length > 0) {
+    console.log(` - ✅  PDF is imported.`)
+  } else {
+    console.log(` - ⚠️  No PDF.`)
+  }
+
+
+  // clean
+  if (hasCleanCmd) {
+    await launchCmd(path, ['clean'], `Clean repository, please wait...`)
+    console.log(` - ✅  repository is clean.`)
+  }
 }

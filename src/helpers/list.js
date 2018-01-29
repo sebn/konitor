@@ -1,6 +1,5 @@
 import repos from '../../list.json'
 import { includes } from 'lodash'
-import Table from 'tty-table'
 
 const REPO_REGEXP = /^https?:\/\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)$/
 const PROVIDER_GITHUB = 'github.com'
@@ -34,41 +33,4 @@ export const getGithubRepositories = () => {
 
 export const getGitlabRepositories = () => {
   return getRepositories(PROVIDER_GITLAB)
-}
-
-export const displayRepositories = (infos) => {
-  const header = [{
-    value: 'provider',
-    alias: 'Provider',
-    align: 'left',
-    paddingLeft: 1,
-    width: 13
-  }, {
-    value: 'owner',
-    alias: 'Owner',
-    align: 'left',
-    paddingLeft: 1,
-    width: 15
-  }, {
-    value: 'repoName',
-    alias: 'Repo Name',
-    align: 'left',
-    paddingLeft: 1,
-    width: 50
-  }, {
-    value: 'libs',
-    alias: 'Konnector Libs',
-    align: 'left',
-    paddingLeft: 1,
-    width: 50
-  }]
-  const t1 = Table(header, infos, {
-    borderStyle : 1,
-    paddingBottom : 0,
-    headerAlign : 'center',
-    align : 'center',
-    color : 'white'
-  })
-
-  console.log(t1.render());
 }
