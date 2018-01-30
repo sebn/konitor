@@ -7,13 +7,16 @@
     "precommit": "pretty-quick --staged",
     "format": "prettier --write '**/*.{js,json}'",
     "start": "babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "babel": {
     "presets": ["env"],
     "plugins": ["transform-object-rest-spread"]
+  },
+  "jest": {
+    "testMatch": ["**/?(*.)spec.js"]
   },
   "prettier": {
     "semi": false
@@ -41,6 +44,7 @@
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
     "husky": "0.14.3",
+    "jest": "22.1.4",
     "prettier": "1.10.2",
     "pretty-quick": "1.2.3"
   }

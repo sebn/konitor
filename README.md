@@ -4,6 +4,7 @@
 [![dependencies Status](https://david-dm.org/konnectors/konitor/status.svg?style=flat-square)](https://david-dm.org/konnectors/konitor)
 [![GitHub tag](https://img.shields.io/github/tag/konnectors/konitor.svg?style=flat-square)](https://github.com/konnectors/konitor/releases)
 [![npm](https://img.shields.io/npm/v/konitor.svg?style=flat-square)](https://www.npmjs.com/package/konitor)
+[![Build Status](https://travis-ci.org/konnectors/konitor.svg?branch=master&style=flat-square)](https://travis-ci.org/konnectors/konitor)
 
 > konitor, the command-line tool for monitoring konnectors
 
@@ -86,7 +87,7 @@ $ yarn start
 
 ## Inspiration
 
-- https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
+* https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
 
 ## License
 
