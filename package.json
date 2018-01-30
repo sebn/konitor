@@ -10,7 +10,7 @@
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "dependencies": {
-    "@octokit/rest": "14.0.3",
+    "@octokit/rest": "14.0.7",
     "chalk": "2.3.0",
     "clear": "0.0.1",
     "clui": "0.3.6",
