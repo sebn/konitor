@@ -1,8 +1,8 @@
-import { getGithubRepositories } from './helpers/list'
-import { getKonnectorPath } from './helpers/config'
-import { getSlug } from './helpers/manifest'
+import { getGithubRepositories } from "./helpers/list"
+import { getKonnectorPath } from "./helpers/config"
+import { getSlug } from "./helpers/manifest"
 
-export const getKonnector = async (name) => {
+export const getKonnector = async name => {
   const konnectors = await getKonnectors()
   const konnector = konnectors.find(k => k.slug === name || k.repoName === name)
 

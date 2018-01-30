@@ -1,21 +1,23 @@
-import program from 'commander'
-import inquirer from 'inquirer'
-import { getKonnectors } from './list'
-import { pulls } from './pulls'
-import { testKonnector } from './test'
-import { selectKonnector } from './helpers/questions'
+import program from "commander"
+import inquirer from "inquirer"
+import { getKonnectors } from "./list"
+import { pulls } from "./pulls"
+import { testKonnector } from "./test"
+import { selectKonnector } from "./helpers/questions"
 
 export const interactive = async () => {
   const konnectors = await getKonnectors()
-  const name = 'name'
-  const message = 'What do you want to do?'
+  const name = "name"
+  const message = "What do you want to do?"
 
-  const aPulls = 'Pull all konnectors'
-  const aTest = 'Test a konnector'
-  const aQuit = 'Quit'
+  const aPulls = "Pull all konnectors"
+  const aTest = "Test a konnector"
+  const aQuit = "Quit"
 
   const question = {
-    type: 'list', name, message,
+    type: "list",
+    name,
+    message,
     choices: [aTest, aPulls, aQuit]
   }
 
@@ -28,11 +30,11 @@ export const interactive = async () => {
     switch (answer) {
       case aPulls:
         await pulls(konnectors)
-        break;
+        break
       case aTest:
         const konnector = await selectKonnector(konnectors)
         await testKonnector(konnector)
-        break;
+        break
     }
   }
 }

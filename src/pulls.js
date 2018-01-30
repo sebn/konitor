@@ -1,14 +1,14 @@
-import CLI from 'clui'
-import { pull as gitPull } from './helpers/git'
+import CLI from "clui"
+import { pull as gitPull } from "./helpers/git"
 
-export const pulls = async (konnectors) => {
+export const pulls = async konnectors => {
   for (const k of konnectors) {
     const result = await pull(k)
     console.log(` - ✅  ${k.repoName}: ${JSON.stringify(result.summary)}`)
   }
 }
 
-export const pull = async (konnector) => {
+export const pull = async konnector => {
   const { url, repoName, path } = konnector
 
   const Spinner = CLI.Spinner
