@@ -1,6 +1,7 @@
 # konitor
 
 [![license](https://img.shields.io/github/license/konnectors/konitor.svg?style=flat-square)](https://github.com/konnectors/konitor/blob/master/LICENSE)
+[![dependencies Status](https://david-dm.org/konnectors/konitor/status.svg?style=flat-square)](https://david-dm.org/konnectors/konitor)
 
 > Tools to check health of konnectors
 
