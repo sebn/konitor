@@ -4,6 +4,8 @@
   "description": "The command-line tool for monitoring konnectors",
   "main": "src/index.js",
   "scripts": {
+    "precommit": "pretty-quick --staged",
+    "format": "prettier --write 'src/**/*.js'",
     "start": "babel-node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +14,9 @@
   "babel": {
     "presets": ["env"],
     "plugins": ["transform-object-rest-spread"]
+  },
+  "prettier": {
+    "semi": false
   },
   "renovate": {
     "extends": ["config:base"]
@@ -34,6 +39,9 @@
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-env": "1.6.1"
+    "babel-preset-env": "1.6.1",
+    "husky": "0.14.3",
+    "prettier": "1.10.2",
+    "pretty-quick": "1.2.3"
   }
 }
