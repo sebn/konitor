@@ -78,3 +78,7 @@ $ yarn start
   Pull all konnectors
   Quit
 ```
+
+## Inspiration
+
+- https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
