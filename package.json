@@ -1,7 +1,7 @@
 {
   "name": "konitor",
   "version": "0.1.0",
-  "description": "Tools to check health of konnectors",
+  "description": "The command-line tool for monitoring konnectors",
   "main": "src/index.js",
   "scripts": {
     "start": "babel-node src/index.js",
