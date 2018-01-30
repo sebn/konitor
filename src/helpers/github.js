@@ -54,8 +54,8 @@ export const getGithubToken = async () => {
   try {
     const result = await github.authorization.create({
       scopes: ['user', 'public_repo', 'repo', 'repo:status'],
-      note: 'cozy-konnector-monitor, the command-line tool for monitoring konnectors',
-      note_url: 'https://github.com/cozy/cozy-konnector-monitor'
+      note: 'konitor, the command-line tool for monitoring konnectors',
+      note_url: 'https://github.com/konnectors/konitor'
     })
     status.stop()
 

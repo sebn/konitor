@@ -1,6 +1,6 @@
 {
-  "name": "cozy-konnector-monitor",
-  "version": "1.0.0",
+  "name": "konitor",
+  "version": "0.1.0",
   "description": "Tools to check health of konnectors",
   "main": "src/index.js",
   "scripts": {
