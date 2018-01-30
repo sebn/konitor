@@ -9,6 +9,13 @@
   },
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
+  "babel": {
+    "presets": ["env"],
+    "plugins": ["transform-object-rest-spread"]
+  },
+  "renovate": {
+    "extends": ["config:base"]
+  },
   "dependencies": {
     "@octokit/rest": "14.0.7",
     "chalk": "2.3.0",
