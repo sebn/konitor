@@ -25,7 +25,7 @@
     "extends": ["config:base"]
   },
   "dependencies": {
-    "@octokit/rest": "14.0.7",
+    "@octokit/rest": "14.0.8",
     "chalk": "2.3.0",
     "clear": "0.0.1",
     "clui": "0.3.6",
