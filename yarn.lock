@@ -10,9 +10,9 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@octokit/rest@14.0.7":
-  version "14.0.7"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-14.0.7.tgz#fef887a79c59c9add0ce66491ab8a990f2462681"
+"@octokit/rest@14.0.8":
+  version "14.0.8"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-14.0.8.tgz#594292f9c30eb86a832f99f7d464ee7c9c8114c5"
   dependencies:
     before-after-hook "^1.1.0"
     debug "^3.1.0"
