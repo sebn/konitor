@@ -2,8 +2,12 @@
   "name": "konitor",
   "version": "0.1.1",
   "description": "The command-line tool for monitoring konnectors",
-  "main": "src/index.js",
+  "main": "./dist",
+  "bin": "./bin/konitor.js",
+  "files": ["bin", "dist"],
   "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "babel src -d dist --copy-files --ignore '**/*.spec.js'",
     "precommit": "pretty-quick --staged",
     "format": "prettier --write '**/*.{js,json}'",
     "start": "babel-node src/index.js",
@@ -12,7 +16,7 @@
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "babel": {
-    "presets": ["env"],
+    "presets": [["env", { "targets": { "node": "6.10" } }]],
     "plugins": ["transform-object-rest-spread"]
   },
   "jest": {
