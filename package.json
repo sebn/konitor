@@ -1,6 +1,6 @@
 {
   "name": "konitor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The command-line tool for monitoring konnectors",
   "main": "./dist",
   "bin": "./bin/konitor.js",
@@ -16,7 +16,16 @@
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "babel": {
-    "presets": [["env", { "targets": { "node": "6.10" } }]],
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "6.10"
+          }
+        }
+      ]
+    ],
     "plugins": ["transform-object-rest-spread"]
   },
   "jest": {
