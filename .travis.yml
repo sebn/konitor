@@ -13,6 +13,7 @@ script:
 deploy:
   provider: npm
   email: npm@fafaru.com
+  skip_cleanup: true
   api_key:
     secure: ZKh/m4/V8U+MdTr1iBrENDspgial5nP79kuChk4B54pwNzK7gyufLxOzrwke8p0CmptTa2t+al4Uf8QdPswotCkLaZ2qCAQ/37PrUQ7Kmk9ZWU43P4+7uVivXbNzk4TvCAIdWVOLRcv8cIPHpt55ILLeoCgXtoVXbQzYv9PxE1ysTA27rdfG6KvT39oNZzcMQzCqRXrw12oa9Fid1+TA8EOlE02xl6vWGntCV+wSKlApUllQrxceErsFnAPd/2FbOqp/rJfYW07tiaTA6ktsr1S8xa/8tu+4ouJ1ehCM3Q48zYNDrv6g8QAYA+1Lo27S9r3CHSDnUs1WxJhWO+Cp+Hj5wiLIta9ic/ZXfejMgn9vxP+Gm9cICGG6P1C7T+fZxKx73sLM0X8ScKFpUmP9TrhBZTb8oGXJ7B1Rp9fFyOpiODG8wTD8OYJCG4gTPiNcVWb+yFf0ph0/AL4KrvsHkJXDjc878opnZk6xlH+XQ9Q0+eJOVbrzvDAdzlbI0ovoJPCSSbzFUJBsopUGLiN11lUxLGVMyuFpJzqv3ZPRyH6Ng2vILK/gT721c4+us8p4tl5LmYpCiVIg7cFqqKtC6pySuOqX3S2nVlPJr7kq5GLGTT1z7j/4Uct7hGGxiphGQ9OCbbz+pk3WrC4gu5o48g9Lj4rCe+E7oSKPXBEku6I=
   on:
