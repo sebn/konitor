@@ -1,3 +1,6 @@
+// simple-git supposes that git is in english or else won't work
+process.env.LANG = "en"
+
 import yargs from "yargs"
 import { version } from "../package.json"
 import { displayLogo } from "./helpers/logo"
