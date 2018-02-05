@@ -17,9 +17,12 @@ export const pull = async konnector => {
   )
   status.start()
 
-  const result = await gitPull(path, url)
-
-  status.stop()
+  try {
+    const result = await gitPull(path, url)
+  } catch (e) {
+    status.stop()
+    throw e
+  }
 
   return result
 }

@@ -8,11 +8,17 @@ import fs from "fs-extra"
 import { includes } from "lodash"
 
 export const testKonnector = async konnector => {
-  const { path, url, repoName } = konnector
+  const { path, url, repoName, update } = konnector
 
   // up to date
-  await pull(konnector)
-  console.log(` - ✅  repository is up to date.`)
+  if (update) {
+    try {
+      await pull(konnector)
+      console.log(` - ✅  repository is up to date.`)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   // dependencies
   await launchCmd(
