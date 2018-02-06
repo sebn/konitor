@@ -1,5 +1,6 @@
 import CLI from "clui"
 import { pull as gitPull } from "./helpers/git"
+import { isInteractive } from "./helpers/interactive"
 
 export const pulls = async konnectors => {
   for (const k of konnectors) {
@@ -10,19 +11,23 @@ export const pulls = async konnectors => {
 
 export const pull = async konnector => {
   const { url, repoName, path } = konnector
-
+  const spinnerMsg = `Pull last change from ${repoName}, please wait...`
   const Spinner = CLI.Spinner
-  const status = new Spinner(
-    `Pull last change from ${repoName}, please wait...`
-  )
-  status.start()
+  const status = new Spinner(spinnerMsg)
+  if (isInteractive) {
+    status.start()
+  } else {
+    console.log(` ${spinnerMsg}`)
+  }
 
   try {
     const result = await gitPull(path, url)
   } catch (e) {
-    status.stop()
+    if (isInteractive) status.stop()
     throw e
   }
+
+  if (isInteractive) status.stop()
 
   return result
 }
