@@ -8,6 +8,18 @@
 
 > konitor, the command-line tool for monitoring konnectors
 
+## Install
+
+Install `konitor` using yarn.
+
+```
+$ yarn global add https://github.com/konnectors/konitor.git
+```
+
+If you cannot execute `konitor` after this command, it may be because you do not
+have the directory where `yarn` stores its symbolic links in your `PATH`. Edit
+it to append the result of `yarn global bin`.
+
 ## Help
 
 ```
@@ -16,13 +28,14 @@ $ yarn start --help
 Usage: index.js <command> [options]
 
 Commands:
-index.js pulls        Pull all konnectors
-index.js test <name>  Test a konnector
-index.js interactive  Launch interactive mode                        [default]
+  index.js pulls          Pull all konnectors
+  index.js test <name>    Test a konnector
+  index.js testit <path>  Test from a konnector
+  index.js interactive    Launch interactive mode                      [default]
 
 Options:
---help     Show help                                                 [boolean]
---version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
 ```
 
 ## Pulls all konnectors
@@ -59,12 +72,16 @@ Pull all konnectors:
 
 ## Test a konnector
 
+You can test a konnector with 2 comands:
+
+- with slug: `yarn start test ameli`
+- with path: `yarn start testit ../ameli`
+
 ```
 $ yarn start test ameli
 
 Test konnector ameli:
 
- - ✅  repository is up to date.
  - ✅  dependencies is installed.
  - ✅  repository is clean.
 ? What's 'login' for konnector 'ameli'? 18**********
@@ -87,7 +104,7 @@ $ yarn start
 
 ## Inspiration
 
-* https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
+- https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
 
 ## License
 

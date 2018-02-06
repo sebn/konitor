@@ -7,20 +7,26 @@ const getPackage = path => {
   return pkg
 }
 
+export const getRepository = path => {
+  const pkg = getPackage(path)
+
+  return pkg.repository && pkg.repository.url
+}
+
 const getVersion = async path => {
-  const pkg = await getPackage(path)
+  const pkg = getPackage(path)
 
   return pkg.version
 }
 
-const getLibVersion = async (path, lib) => {
-  const pkg = await getPackage(path)
+const getLibVersion = (path, lib) => {
+  const pkg = getPackage(path)
 
   return pkg.dependencies[lib] || pkg.devDependencies[lib]
 }
 
-export const hasCmd = async (path, cmd) => {
-  const pkg = await getPackage(path)
+export const hasCmd = (path, cmd) => {
+  const pkg = getPackage(path)
 
   return !!pkg.scripts[cmd]
 }
