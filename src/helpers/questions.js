@@ -1,5 +1,6 @@
 import inquirer from "inquirer"
 import { find } from "lodash"
+import { isInteractive } from "./interactive"
 
 const name = "name"
 
@@ -18,13 +19,17 @@ export const selectKonnector = async konnectors => {
 }
 
 export const askKonnectorField = async (slug, field) => {
-  const message = `What's '${field}' for konnector '${slug}'?`
-  const question = {
-    type: field === "password" ? "password" : "input",
-    name,
-    message
-  }
-  const answer = (await inquirer.prompt(question))[name]
+  if (isInteractive) {
+    const message = `What's '${field}' for konnector '${slug}'?`
+    const question = {
+      type: field === "password" ? "password" : "input",
+      name,
+      message
+    }
+    const answer = (await inquirer.prompt(question))[name]
 
-  return answer
+    return answer
+  } else {
+    throw new Error(`Field '${field}' for konnector '${slug}' isn't set.`)
+  }
 }

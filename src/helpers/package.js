@@ -1,5 +1,6 @@
 import CLI from "clui"
 import { spawn } from "child_process"
+import { isInteractive } from "./interactive"
 
 const getPackage = path => {
   const pkg = require(`${path}/package.json`)
@@ -35,7 +36,12 @@ export const launchCmd = async (path, params, spinnerMsg) => {
   return new Promise(async resolve => {
     const Spinner = CLI.Spinner
     const status = new Spinner(spinnerMsg)
-    status.start()
+
+    if (isInteractive) {
+      status.start()
+    } else {
+      console.log(` ${spinnerMsg}`)
+    }
 
     const result = { stdout: [], stderr: [] }
     const cmd = await spawn("yarn", params, { cwd: path, encoding: "utf8" })
@@ -44,7 +50,7 @@ export const launchCmd = async (path, params, spinnerMsg) => {
 
     cmd.on("close", code => {
       result.code = code
-      status.stop()
+      if (isInteractive) status.stop()
       resolve(result)
     })
   })
