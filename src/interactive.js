@@ -23,7 +23,6 @@ export const interactive = async () => {
 
   let answer
   while (answer !== aQuit) {
-    console.log()
     answer = (await inquirer.prompt(question))[name]
     console.log()
 
@@ -33,8 +32,9 @@ export const interactive = async () => {
         break
       case aTest:
         const konnector = await selectKonnector(konnectors)
-        await testKonnector(konnector)
+        await testKonnector(false, konnector)
         break
     }
+    console.log()
   }
 }

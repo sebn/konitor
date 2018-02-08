@@ -37,7 +37,7 @@ export const launchCmd = async (path, params, spinnerMsg) => {
     const Spinner = CLI.Spinner
     const status = new Spinner(spinnerMsg)
 
-    if (isInteractive) {
+    if (isInteractive()) {
       status.start()
     } else {
       console.log(` ${spinnerMsg}`)
@@ -50,7 +50,7 @@ export const launchCmd = async (path, params, spinnerMsg) => {
 
     cmd.on("close", code => {
       result.code = code
-      if (isInteractive) status.stop()
+      if (isInteractive()) status.stop()
       resolve(result)
     })
   })

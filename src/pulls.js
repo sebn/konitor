@@ -14,20 +14,21 @@ export const pull = async konnector => {
   const spinnerMsg = `Pull last change from ${repoName}, please wait...`
   const Spinner = CLI.Spinner
   const status = new Spinner(spinnerMsg)
-  if (isInteractive) {
+  if (isInteractive()) {
     status.start()
   } else {
     console.log(` ${spinnerMsg}`)
   }
 
+  let result
   try {
-    const result = await gitPull(path, url)
+    result = await gitPull(path, url)
   } catch (e) {
-    if (isInteractive) status.stop()
+    if (isInteractive()) status.stop()
     throw e
   }
 
-  if (isInteractive) status.stop()
+  if (isInteractive()) status.stop()
 
   return result
 }
