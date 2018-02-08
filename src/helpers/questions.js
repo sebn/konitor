@@ -19,7 +19,7 @@ export const selectKonnector = async konnectors => {
 }
 
 export const askKonnectorField = async (slug, field) => {
-  if (isInteractive) {
+  if (isInteractive()) {
     const message = `What's '${field}' for konnector '${slug}'?`
     const question = {
       type: field === "password" ? "password" : "input",

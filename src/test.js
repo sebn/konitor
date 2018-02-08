@@ -7,7 +7,7 @@ import { pull } from "./pulls"
 import fs from "fs-extra"
 import { includes } from "lodash"
 
-export const testKonnector = async konnector => {
+export const testKonnector = async (config, konnector) => {
   const { path, url, repoName, update } = konnector
 
   // up to date
@@ -35,25 +35,29 @@ export const testKonnector = async konnector => {
     console.log(` - ✅  repository is clean.`)
   }
 
-  // create credentials
-  const slug = await getSlug(path)
-  const fieldsFromManifest = await getFields(path)
-  const fields = {}
-  for (const field of fieldsFromManifest) {
-    let value = getKonnectorField(slug, field)
-    if (!value) {
-      value = await askKonnectorField(slug, field)
-      setKonnectorField(slug, field, value)
+  if (config) {
+    fs.copyFileSync(config, `${path}/konnector-dev-config.json`)
+  } else {
+    // create credentials
+    const slug = await getSlug(path)
+    const fieldsFromManifest = await getFields(path)
+    const fields = {}
+    for (const field of fieldsFromManifest) {
+      let value = getKonnectorField(slug, field)
+      if (!value) {
+        value = await askKonnectorField(slug, field)
+        setKonnectorField(slug, field, value)
+      }
+      fields[field] = value
     }
-    fields[field] = value
-  }
 
-  // create file with credentials
-  const template = { COZY_URL: "http://cozy.tools:8080", fields }
-  fs.writeFileSync(
-    `${path}/konnector-dev-config.json`,
-    JSON.stringify(template, null, "  ")
-  )
+    // create file with credentials
+    const template = { COZY_URL: "http://cozy.tools:8080", fields }
+    fs.writeFileSync(
+      `${path}/konnector-dev-config.json`,
+      JSON.stringify(template, null, "  ")
+    )
+  }
 
   // Launch standalone test
   const result = await launchCmd(
@@ -63,6 +67,11 @@ export const testKonnector = async konnector => {
   )
 
   // Test
+  if (result.code === 0) {
+    console.log(` - ✅  Correctly execute.`)
+  } else {
+    console.log(` - ⚠️  Execute finised with error.`)
+  }
   if (includes(result.stdout.join(", "), "Correctly logged in")) {
     console.log(` - ✅  Correctly logged in.`)
   } else {
@@ -80,4 +89,6 @@ export const testKonnector = async konnector => {
     await launchCmd(path, ["clean"], `Clean repository, please wait...`)
     console.log(` - ✅  repository is clean.`)
   }
+
+  return result.code
 }
