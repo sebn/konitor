@@ -63,6 +63,11 @@ export const testKonnector = async konnector => {
   )
 
   // Test
+  if (result.code === 0) {
+    console.log(` - ✅  Correctly execute.`)
+  } else {
+    console.log(` - ⚠️  Execute finised with error.`)
+  }
   if (includes(result.stdout.join(", "), "Correctly logged in")) {
     console.log(` - ✅  Correctly logged in.`)
   } else {
@@ -80,4 +85,6 @@ export const testKonnector = async konnector => {
     await launchCmd(path, ["clean"], `Clean repository, please wait...`)
     console.log(` - ✅  repository is clean.`)
   }
+
+  return result.code
 }

@@ -31,8 +31,9 @@ yargs
     handler: async ({ name }) => {
       console.log(`\nTest konnector ${name}:\n`)
       const konnector = await getKonnector(name)
-      await testKonnector(konnector)
+      const code = await testKonnector(konnector)
       console.log()
+      process.exit(code)
     }
   })
   .command({
@@ -44,8 +45,9 @@ yargs
       }
       const konnector = await getKonnectorFromPath(path)
       console.log(`\nTest konnector ${konnector.slug}:\n`)
-      await testKonnector(konnector)
+      const code = await testKonnector(konnector)
       console.log()
+      process.exit(code)
     }
   })
   .command({
