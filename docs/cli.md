@@ -5,7 +5,9 @@
 * [`konitor` or `konitor interactive`](#interactive)
 * [`konitor pulls`](#pulls)
 * [`konitor test trainline`](#test)
-* [`konitor testit ../trainline`](#test-it)
+* [`konitor testit ../trainline`](#testit)
+
+---
 
 ## Interactive
 
