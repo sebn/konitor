@@ -165,7 +165,7 @@ Test konnector trainline:
 - ✅  repository is up to date.
 - ✅  dependencies is installed.
 - ✅  repository is clean.
-- ✅  Correctly execute.
+- ✅  Correctly executed.
 - ✅  Correctly logged in.
 - ✅  PDF is imported.
 - ✅  repository is clean.
@@ -216,7 +216,7 @@ Test konnector trainline:
 
 - ✅  dependencies is installed.
 - ✅  repository is clean.
-- ✅  Correctly execute.
+- ✅  Correctly executed.
 - ✅  Correctly logged in.
 - ✅  PDF is imported.
 - ✅  repository is clean.

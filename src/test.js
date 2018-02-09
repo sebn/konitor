@@ -68,9 +68,9 @@ export const testKonnector = async (config, konnector) => {
 
   // Test
   if (result.code === 0) {
-    console.log(` - ✅  Correctly execute.`)
+    console.log(` - ✅  Correctly executed.`)
   } else {
-    console.log(` - ⚠️  Execute finised with error.`)
+    console.log(` - ⚠️  Finished with error.`)
   }
   if (includes(result.stdout.join(", "), "Correctly logged in")) {
     console.log(` - ✅  Correctly logged in.`)
