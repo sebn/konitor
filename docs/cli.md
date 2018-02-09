@@ -52,6 +52,8 @@ Pull all konnectors
 Quit
 ```
 
+---
+
 ## Pulls
 
 > Pulls all konnectors on preference directory
@@ -118,6 +120,8 @@ Pull all konnectors:
  - ✅  cozy-konnector-virgin-mobile: {"changes":0,"insertions":0,"deletions":0}
 ```
 
+---
+
 ## Test
 
 > You can test a konnector with slug or repository name:
@@ -172,6 +176,8 @@ Test konnector trainline:
 - ✅  PDF is imported.
 - ✅  repository is clean.
 ```
+
+---
 
 ## testit
 
