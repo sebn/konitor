@@ -35,7 +35,12 @@
     "semi": false
   },
   "renovate": {
-    "extends": ["config:base"]
+    "extends": ["config:base"],
+    "timezone": "Europe/Paris",
+    "schedule": ["after 1am and before 7am on every weekday"],
+    "patch": {
+      "automerge": true
+    }
   },
   "repository": {
     "type": "git",
