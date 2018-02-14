@@ -33,6 +33,14 @@ export const setKonnectorField = (slug, field, value) => {
 
 export const getKonnectorField = (slug, field) => {
   const fromEnv = process.env[`FIELD_${field.toUpperCase()}`]
+  if (fromEnv) {
+    return fromEnv
+  }
 
-  return fromEnv ? fromEnv : conf.get(`konnector.${slug}.${field}`)
+  const config = JSON.parse(process.env.KONNECTOR_CONFIG)
+  if (config && config.fields && config.fields[field]) {
+    return config.fields[field]
+  }
+
+  return conf.get(`konnector.${slug}.${field}`)
 }
