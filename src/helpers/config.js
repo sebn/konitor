@@ -37,9 +37,11 @@ export const getKonnectorField = (slug, field) => {
     return fromEnv
   }
 
-  const config = JSON.parse(process.env.KONNECTOR_CONFIG)
-  if (config && config.fields && config.fields[field]) {
-    return config.fields[field]
+  if (process.env.KONNECTOR_CONFIG) {
+    const config = JSON.parse(process.env.KONNECTOR_CONFIG)
+    if (config && config.fields && config.fields[field]) {
+      return config.fields[field]
+    }
   }
 
   return conf.get(`konnector.${slug}.${field}`)
