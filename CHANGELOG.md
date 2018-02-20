@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [v0.5.1] - 2018-02-20
+### Fixed
+- fix: when KONNECTOR_CONFIG is not enquire 🐛
+
+
 ## [v0.5.0] - 2018-02-14
 ### Added
 - doc: Add separator 📏
@@ -48,7 +53,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add binary style 🏂
 
 
-[unreleased]: https://github.com/konnectors/konitor/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/konnectors/konitor/compare/v0.5.1...HEAD
+[v0.5.1]: https://github.com/konnectors/konitor/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/konnectors/konitor/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/konnectors/konitor/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/konnectors/konitor/compare/v0.2.2...v0.3.0
