@@ -72,7 +72,10 @@ export const testKonnector = async (config, konnector) => {
   } else {
     console.log(` - ⚠️  Finished with error.`)
   }
-  if (includes(result.stdout.join(', '), 'Correctly logged in')) {
+  if (
+    includes(result.stdout.join(', '), 'Correctly logged in') ||
+    includes(result.stdout.join(', '), 'Successfully logged in')
+  ) {
     console.log(` - ✅  Correctly logged in.`)
   } else {
     console.log(` - ⚠️  Login failed.`)
