@@ -1,7 +1,7 @@
 import repos from '../../list.json'
 import { includes } from 'lodash'
 
-const REPO_REGEXP = /^https?:\/\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)$/
+const REPO_REGEXP = /^(git\+)?https?:\/\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+)$/
 const PROVIDER_GITHUB = 'github.com'
 const PROVIDER_GITLAB = 'gitlab.cozycloud.cc'
 
