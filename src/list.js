@@ -1,7 +1,7 @@
-import { getGithubRepositories, parsingRepository } from "./helpers/list"
-import { getKonnectorPath } from "./helpers/config"
-import { getRepository } from "./helpers/package"
-import { getSlug } from "./helpers/manifest"
+import { getGithubRepositories, parsingRepository } from './helpers/list'
+import { getKonnectorPath } from './helpers/config'
+import { getRepository } from './helpers/package'
+import { getSlug } from './helpers/manifest'
 
 export const getKonnectorFromPath = async path => {
   const repository = getRepository(path)

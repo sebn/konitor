@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-"use strict"
+'use strict'
 
-require("..").default
+require('..').default // eslint-disable-line no-unused-expressions

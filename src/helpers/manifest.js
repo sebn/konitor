@@ -1,4 +1,4 @@
-import fs from "fs-extra"
+import fs from 'fs-extra'
 
 export const getManifest = async path => {
   const manifest = await fs.readJson(`${path}/manifest.konnector`)
@@ -13,7 +13,7 @@ export const getFields = async path => {
     manifest.fields &&
     manifest.fields.account &&
     manifest.fields.account.accountFormat &&
-    manifest.fields.account.accountFormat.split(",")
+    manifest.fields.account.accountFormat.split(',')
   )
 }
 

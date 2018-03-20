@@ -1,6 +1,6 @@
-import CLI from "clui"
-import { spawn } from "child_process"
-import { isInteractive } from "./interactive"
+import CLI from 'clui'
+import { spawn } from 'child_process'
+import { isInteractive } from './interactive'
 
 const getPackage = path => {
   const pkg = require(`${path}/package.json`)
@@ -14,13 +14,13 @@ export const getRepository = path => {
   return pkg.repository && pkg.repository.url
 }
 
-const getVersion = async path => {
+export const getVersion = async path => {
   const pkg = getPackage(path)
 
   return pkg.version
 }
 
-const getLibVersion = (path, lib) => {
+export const getLibVersion = (path, lib) => {
   const pkg = getPackage(path)
 
   return pkg.dependencies[lib] || pkg.devDependencies[lib]
@@ -44,11 +44,11 @@ export const launchCmd = async (path, params, spinnerMsg) => {
     }
 
     const result = { stdout: [], stderr: [] }
-    const cmd = await spawn("yarn", params, { cwd: path, encoding: "utf8" })
-    cmd.stdout.on("data", data => result.stdout.push(data.toString()))
-    cmd.stderr.on("data", data => result.stderr.push(data))
+    const cmd = await spawn('yarn', params, { cwd: path, encoding: 'utf8' })
+    cmd.stdout.on('data', data => result.stdout.push(data.toString()))
+    cmd.stderr.on('data', data => result.stderr.push(data))
 
-    cmd.on("close", code => {
+    cmd.on('close', code => {
       result.code = code
       if (isInteractive()) status.stop()
       resolve(result)
