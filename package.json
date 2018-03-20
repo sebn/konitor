@@ -45,7 +45,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@octokit/rest": "14.0.9",
+    "@octokit/rest": "15.2.5",
     "chalk": "2.3.2",
     "clear": "0.0.1",
     "clui": "0.3.6",
