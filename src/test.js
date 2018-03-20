@@ -85,6 +85,7 @@ export const testKonnector = async (config, konnector) => {
     console.log(` - ✅  PDF is imported.`)
   } else {
     console.log(` - ⚠️  No PDF.`)
+    console.log(result.stdout)
   }
 
   // clean
