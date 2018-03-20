@@ -1,6 +1,6 @@
-import CLI from "clui"
-import { pull as gitPull } from "./helpers/git"
-import { isInteractive } from "./helpers/interactive"
+import CLI from 'clui'
+import { pull as gitPull } from './helpers/git'
+import { isInteractive } from './helpers/interactive'
 
 export const pulls = async konnectors => {
   for (const k of konnectors) {

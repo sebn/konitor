@@ -1,13 +1,13 @@
-import inquirer from "inquirer"
-import { find } from "lodash"
-import { isInteractive } from "./interactive"
+import inquirer from 'inquirer'
+import { find } from 'lodash'
+import { isInteractive } from './interactive'
 
-const name = "name"
+const name = 'name'
 
 export const selectKonnector = async konnectors => {
-  const message = "Which konnector do you want to test?"
+  const message = 'Which konnector do you want to test?'
   const question = {
-    type: "list",
+    type: 'list',
     name,
     message,
     choices: konnectors.map(k => (k.slug === undefined ? k.repoName : k.slug))
@@ -22,7 +22,7 @@ export const askKonnectorField = async (slug, field) => {
   if (isInteractive()) {
     const message = `What's '${field}' for konnector '${slug}'?`
     const question = {
-      type: field === "password" ? "password" : "input",
+      type: field === 'password' ? 'password' : 'input',
       name,
       message
     }

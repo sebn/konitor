@@ -5,14 +5,6 @@
   "main": "./dist",
   "bin": "./bin/konitor.js",
   "files": ["bin", "dist", "list.json"],
-  "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "babel src -d dist --copy-files --ignore '**/*.spec.js'",
-    "precommit": "pretty-quick --staged",
-    "format": "prettier --write '**/*.{js,json}'",
-    "start": "babel-node src/index.js",
-    "test": "jest"
-  },
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "babel": {
@@ -31,20 +23,26 @@
   "jest": {
     "testMatch": ["**/?(*.)spec.js"]
   },
-  "prettier": {
-    "semi": false
+  "eslintConfig": {
+    "extends": ["eslint-config-cozy-app"]
   },
-  "renovate": {
-    "extends": ["config:base"],
-    "timezone": "Europe/Paris",
-    "schedule": ["after 1am and before 7am on every weekday"],
-    "patch": {
-      "automerge": true
-    }
+  "eslintIgnore": ["dist"],
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/konnectors/konitor.git"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "babel src -d dist --copy-files --ignore '**/*.spec.js'",
+    "precommit": "yarn lint",
+    "format": "prettier --write '**/*.{js,json}'",
+    "lint": "eslint .",
+    "start": "babel-node src/index.js",
+    "test": "jest"
   },
   "dependencies": {
     "@octokit/rest": "14.0.9",
@@ -65,9 +63,10 @@
     "babel-cli": "6.26.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.1",
+    "eslint": "4.19.0",
+    "eslint-config-cozy-app": "0.4.0",
     "husky": "0.14.3",
     "jest": "22.3.0",
-    "prettier": "1.11.1",
-    "pretty-quick": "1.4.1"
+    "prettier": "1.11.1"
   }
 }

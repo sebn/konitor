@@ -1,6 +1,6 @@
-import ttyTable from "tty-table"
+import ttyTable from 'tty-table'
 
-const Table = ttyTable("automattic-cli-table")
+const Table = ttyTable('automattic-cli-table')
 
 export const pullTable = () => {
   const options = {
@@ -10,7 +10,7 @@ export const pullTable = () => {
   }
   const displayHeader = () => {
     var table = new Table(options)
-    table.push(["Status", "Name", "Changes", "Insertions", "Deletions"])
+    table.push(['Status', 'Name', 'Changes', 'Insertions', 'Deletions'])
     console.log(table.toString())
   }
   const displayRow = (status, name, changes, insertions, deletions) => {
