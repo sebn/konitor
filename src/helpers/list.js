@@ -8,9 +8,9 @@ const PROVIDER_GITLAB = 'gitlab.cozycloud.cc'
 export const parsingRepository = url => {
   const matching = url.match(REPO_REGEXP)
   return {
-    provider: matching[1] === PROVIDER_GITHUB ? 'Github' : 'Gitlab',
-    owner: matching[2],
-    repoName: matching[3],
+    provider: matching[2] === PROVIDER_GITHUB ? 'Github' : 'Gitlab',
+    owner: matching[3],
+    repoName: matching[4],
     url
   }
 }
