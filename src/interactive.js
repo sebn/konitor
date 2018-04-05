@@ -26,13 +26,15 @@ export const interactive = async () => {
     console.log()
 
     switch (answer) {
-      case aPulls:
+      case aPulls: {
         await pulls(konnectors)
         break
-      case aTest:
+      }
+      case aTest: {
         const konnector = await selectKonnector(konnectors)
         await testKonnector(false, konnector)
         break
+      }
     }
     console.log()
   }
