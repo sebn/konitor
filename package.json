@@ -13,7 +13,7 @@
         "env",
         {
           "targets": {
-            "node": "6.10"
+            "node": "8"
           }
         }
       ]
@@ -24,13 +24,12 @@
     "testMatch": ["**/?(*.)spec.js"]
   },
   "eslintConfig": {
-    "extends": ["eslint-config-cozy-app"]
+    "extends": ["eslint-config-cozy-app"],
+    "rules": {
+      "no-console": 0
+    }
   },
   "eslintIgnore": ["dist"],
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/konnectors/konitor.git"
@@ -39,8 +38,7 @@
     "prebuild": "rm -rf dist",
     "build": "babel src -d dist --copy-files --ignore '**/*.spec.js'",
     "precommit": "yarn lint",
-    "format": "prettier --write '**/*.{js,json}'",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "start": "babel-node src/index.js",
     "test": "jest"
   },
@@ -66,7 +64,6 @@
     "eslint": "4.19.1",
     "eslint-config-cozy-app": "0.5.1",
     "husky": "0.14.3",
-    "jest": "22.4.3",
-    "prettier": "1.11.1"
+    "jest": "22.4.3"
   }
 }
