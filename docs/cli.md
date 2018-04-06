@@ -229,3 +229,23 @@ Test konnector trainline:
 - ✅  PDF is imported.
 - ✅  repository is clean.
 ```
+
+## check 🤓
+
+Check is used to programmatically check our guidelines against a repository. Use it before publishing your konnector for it to be production ready 🚀
+
+Here is a sample output :
+
+```bash
+$ konitor check ./cozy-konnector-ameli/
+Checking ./cozy-konnector-ameli/
+Eslint with prettier is used to lint the code (check for eslintConfig in package.json) ❌
+ -  eslintConfig should extend from prettier ❌
+Fields (necessary for login) are defined in manifest.konnector ❌
+ -  The fields should not be in old format ❌
+Travis is correctly configured to deploy master/prod. ✅
+Renovate should be correctly configured. ❌
+ -  Renovate config should extend from the cozy-konnector config ❌
+Check the documentation:  https://github.com/konnectors/docs/blob/master/status.md#renovate
+Repository should have 4 branches. ✅
+```
