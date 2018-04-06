@@ -4,9 +4,12 @@ import yaml from 'js-yaml'
 import { execSync } from 'child_process'
 
 const lintedByEslintPrettier = {
-  fn: info => {
+  fn: (info, assert) => {
     const eslintConfig = info.pkg.eslintConfig
-    return eslintConfig.extends.indexOf('prettier') > -1
+    assert(
+      eslintConfig && eslintConfig.extends.indexOf('prettier') > -1,
+      'eslintConfig should extend from prettier'
+    )
   },
   message:
     'Eslint with prettier is used to lint the code (check for eslintConfig in package.json)'
@@ -22,8 +25,14 @@ const hasFieldsInManifest = {
 
 const travisUsedToDeployBuildAndLatest = {
   fn: (info, assert) => {
-    const travis = yaml.safeLoad(info.read('.travis.yml'))
-    if (!travis.deploy || travis.deploy.length !== 2) {
+    let travis
+    try {
+      travis = yaml.safeLoad(info.read('.travis.yml'))
+      if (!travis.deploy || travis.deploy.length !== 2) {
+        return false
+      }
+    } catch (e) {
+      assert(travis, 'Travis file should be present')
       return false
     }
     assert(
@@ -57,12 +66,12 @@ const renovateIsConfigured = {
       renovate = info.pkg.renovate
     }
     assert(
-      renovate.extends.indexOf('cozy-konnector') > 0,
-      'Renovate config should extend from the cozy-konnector config'
-    )
-    assert(
       renovate,
       'Renovate should be configured in renovate.json or in package.json'
+    )
+    assert(
+      renovate && renovate.extends.indexOf('cozy-konnector') > 0,
+      'Renovate config should extend from the cozy-konnector config'
     )
     return true
   },
