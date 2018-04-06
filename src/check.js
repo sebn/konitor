@@ -16,8 +16,10 @@ const lintedByEslintPrettier = {
 }
 
 const hasFieldsInManifest = {
-  fn: info => {
+  fn: (info, assert) => {
     const fields = info.manifest && info.manifest.fields
+    const oldFormat = fields && fields.account && fields.account.accountFormat
+    assert(!oldFormat, 'The fields should not be in old format')
     return Boolean(fields)
   },
   message: 'Fields (necessary for login) are defined in manifest.konnector'
