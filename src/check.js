@@ -56,7 +56,8 @@ const travisUsedToDeployBuildAndLatest = {
     )
     return true
   },
-  message: 'Travis is correctly configured to deploy master/prod'
+  message: 'Travis is correctly configured to deploy master/prod.',
+  link: 'https://github.com/konnectors/docs/blob/master/status.md#auto-build'
 }
 
 const renovateIsConfigured = {
@@ -72,7 +73,8 @@ const renovateIsConfigured = {
     )
     return true
   },
-  message: 'Renovate should be correctly configured'
+  message: 'Renovate should be correctly configured.',
+  link: 'https://github.com/konnectors/docs/blob/master/status.md#renovate'
 }
 
 const repoShouldHave4Branches = {
@@ -85,7 +87,8 @@ const repoShouldHave4Branches = {
       )
     }
   },
-  message: 'Repository should have 4 branches'
+  message: 'Repository should have 4 branches.',
+  link: 'https://github.com/konnectors/docs/blob/master/status.md#git-branch'
 }
 
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
@@ -209,6 +212,9 @@ const checkRepository = async repository => {
     if (res.warnings.length > 0) {
       for (let warning of res.warnings) {
         logger.warn(' - ', warning, '❌')
+      }
+      if (check.link) {
+        logger.log('Check the documentation: ', check.link)
       }
     }
     info.warnings = []
