@@ -59,7 +59,7 @@ const travisUsedToDeployBuildAndLatest = {
 
 const renovateIsConfigured = {
   fn: (info, assert) => {
-    const renovate = JSON.parse(info.read('renovate.json')) || info.pkg.renovate
+    const renovate = JSON.parse(info.read('renovate.json')) || (info.pkg && info.pkg.renovate)
     assert(
       renovate,
       'Renovate should be configured in renovate.json or in package.json'
