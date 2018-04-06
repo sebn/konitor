@@ -13,6 +13,7 @@ const lintedByEslintPrettier = {
     )
   },
   nickname: 'eslint',
+  link: 'https://github.com/konnectors/docs/blob/master/status.md#linting',
   message:
     'Eslint with prettier is used to lint the code (check for eslintConfig in package.json)'
 }
@@ -210,21 +211,28 @@ class BufferLogger {
 const checkRepository = async repository => {
   const logger = new BufferLogger()
   const info = await prepareInfo(repository)
-  logger.log(`Checking ${repository}`)
+  logger.log()
+  logger.log(`## Checking ${repository}`)
+  logger.log()
   for (let check of checks) {
     const res = { warnings: [] }
     const assert = mkAssert(res)
     const ok = trueIfUndefined(await check.fn(info, assert))
-    logger.log(check.message, ok && res.warnings.length === 0 ? '✅' : '❌')
+    const failed = !ok || res.warnings.length > 0
+    logger.log('*', check.message, !failed ? '✅' : '❌')
     if (res.warnings.length > 0) {
       for (let warning of res.warnings) {
-        logger.warn(' - ', warning, '❌')
-      }
-      if (check.link) {
-        logger.log('Check the documentation: ', check.link)
+        logger.warn('  -', warning, '❌')
       }
     }
+    if (failed && check.link) {
+      logger.log('  Check the documentation: ', check.link)
+    }
     info.warnings = []
+
+    if (check !== checks[checks.length - 1]) {
+      logger.log()
+    }
   }
   logger.log()
   logger.flush()
