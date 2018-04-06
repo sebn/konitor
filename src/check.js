@@ -12,6 +12,7 @@ const lintedByEslintPrettier = {
       'eslintConfig should extend from prettier'
     )
   },
+  nickname: 'eslint',
   message:
     'Eslint with prettier is used to lint the code (check for eslintConfig in package.json)'
 }
@@ -23,6 +24,7 @@ const hasFieldsInManifest = {
     assert(!oldFormat, 'The fields should not be in old format')
     return Boolean(fields)
   },
+  nickname: 'fields',
   message: 'Fields (necessary for login) are defined in manifest.konnector'
 }
 
@@ -57,6 +59,7 @@ const travisUsedToDeployBuildAndLatest = {
     )
     return true
   },
+  nickname: 'travis',
   message: 'Travis is correctly configured to deploy master/prod.',
   link: 'https://github.com/konnectors/docs/blob/master/status.md#auto-build'
 }
@@ -75,6 +78,7 @@ const renovateIsConfigured = {
     )
     return true
   },
+  nickname: 'renovate',
   message: 'Renovate should be correctly configured.',
   link: 'https://github.com/konnectors/docs/blob/master/status.md#renovate'
 }
@@ -89,6 +93,7 @@ const repoShouldHave4Branches = {
       )
     }
   },
+  nickname: '4branches',
   message: 'Repository should have 4 branches.',
   link: 'https://github.com/konnectors/docs/blob/master/status.md#git-branch'
 }
