@@ -4,7 +4,11 @@
   "description": "The command-line tool for monitoring konnectors",
   "main": "./dist",
   "bin": "./bin/konitor.js",
-  "files": ["bin", "dist", "list.json"],
+  "files": [
+    "bin",
+    "dist",
+    "list.json"
+  ],
   "author": "Simon Constans <simonc@linux.com>",
   "license": "MIT",
   "babel": {
@@ -18,18 +22,26 @@
         }
       ]
     ],
-    "plugins": ["transform-object-rest-spread"]
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   },
   "jest": {
-    "testMatch": ["**/?(*.)spec.js"]
+    "testMatch": [
+      "**/?(*.)spec.js"
+    ]
   },
   "eslintConfig": {
-    "extends": ["eslint-config-cozy-app"],
+    "extends": [
+      "eslint-config-cozy-app"
+    ],
     "rules": {
       "no-console": 0
     }
   },
-  "eslintIgnore": ["dist"],
+  "eslintIgnore": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/konnectors/konitor.git"
@@ -51,6 +63,7 @@
     "figlet": "1.2.0",
     "fs-extra": "5.0.0",
     "inquirer": "5.2.0",
+    "js-yaml": "3.11.0",
     "lodash": "4.17.5",
     "mkdirp": "0.5.1",
     "simple-git": "1.92.0",

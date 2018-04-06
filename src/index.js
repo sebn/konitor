@@ -7,6 +7,7 @@ import { setInteractive } from './helpers/interactive'
 import { pulls } from './pulls'
 import { testKonnector } from './test'
 import { getKonnector, getKonnectorFromPath, getKonnectors } from './list'
+import checkGuidelines from './check'
 
 // simple-git supposes that git is in english or else won't work
 process.env.LANG = 'en'
@@ -82,6 +83,14 @@ yargs // eslint-disable-line no-unused-expressions
     desc: 'Launch interactive mode',
     handler: async () => {
       await interactive()
+    }
+  })
+  .command({
+    command: 'check <repository>',
+    aliases: ['$0'],
+    desc: 'Launch interactive mode',
+    handler: async options => {
+      await checkGuidelines(options)
     }
   })
   .locale('en').argv
