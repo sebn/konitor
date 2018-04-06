@@ -7,7 +7,8 @@ const lintedByEslintPrettier = {
   fn: (info, assert) => {
     const eslintConfig = info.pkg && info.pkg.eslintConfig
     assert(
-      eslintConfig && eslintConfig.extends.indexOf('prettier') > -1,
+      eslintConfig &&
+        eslintConfig.extends.indexOf('eslint-config-cozy-app') > -1,
       'eslintConfig should extend from prettier'
     )
   },
@@ -69,7 +70,7 @@ const renovateIsConfigured = {
       'Renovate should be configured in renovate.json or in package.json'
     )
     assert(
-      renovate && renovate.extends.indexOf('cozy-konnector') > 0,
+      renovate && renovate.extends.indexOf('cozy-konnector') > -1,
       'Renovate config should extend from the cozy-konnector config'
     )
     return true
