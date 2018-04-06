@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import yaml from 'js-yaml'
-import { execSync } from 'child_process'
+import { exec } from 'child_process'
 
 const lintedByEslintPrettier = {
   fn: (info, assert) => {
@@ -59,12 +59,7 @@ const travisUsedToDeployBuildAndLatest = {
 
 const renovateIsConfigured = {
   fn: (info, assert) => {
-    let renovate
-    try {
-      renovate = JSON.parse(info.read('renovate.json'))
-    } catch (e) {
-      renovate = info.pkg.renovate
-    }
+    const renovate = JSON.parse(info.read('renovate.json')) || info.pkg.renovate
     assert(
       renovate,
       'Renovate should be configured in renovate.json or in package.json'
@@ -80,23 +75,54 @@ const renovateIsConfigured = {
 
 const repoShouldHave4Branches = {
   fn: (info, assert) => {
-    ;['master', 'build', 'latest', 'prod'].forEach(branch => {
+    for (let branch of ['master', 'build', 'latest', 'prod']) {
+      const fullBranch = info.git.remote + '/' + branch
       assert(
-        info.git.branches.indexOf('origin/' + branch) > -1,
+        info.git.branches.indexOf(fullBranch) > -1,
         `Repository should have branch ${branch}`
       )
-    })
+    }
   },
   message: 'Repository should have 4 branches'
 }
 
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
-const prepareGitInfo = repository => {
+const execAsPromise = (cmd, options) => {
+  return new Promise((resolve, reject) => {
+    exec(cmd, options, (err, stdout) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(stdout)
+      }
+    })
+  })
+}
+
+const getOriginalRemote = async repository => {
+  const workingDir = path.join(process.cwd(), repository)
+  const remotes = (await execAsPromise('git remote -v', {
+    cwd: workingDir
+  })).split('\n')
+  const originals = remotes.filter(
+    x => x.indexOf('git@github.com:konnectors/') > -1
+  )
+  if (originals.length === 0) {
+    return 'origin'
+  }
+  const originalRemote = originals[0].split('\t')[0]
+  return originalRemote
+}
+
+const prepareGitInfo = async repository => {
   const workingDir = path.join(process.cwd(), repository)
   let res
   try {
-    res = execSync('git branch -r', {
+    await execAsPromise('git fetch', {
+      cwd: workingDir
+    })
+    res = await execAsPromise('git branch -r', {
       cwd: workingDir
     })
   } catch (e) {
@@ -109,7 +135,8 @@ const prepareGitInfo = repository => {
         .map(line => strip(line))
     : []
   return {
-    branches: branches
+    branches: branches,
+    remote: await getOriginalRemote(repository)
   }
 }
 
@@ -119,7 +146,7 @@ const mkAssert = res => (assertion, warning) => {
   }
 }
 
-const prepareInfo = repository => {
+const prepareInfo = async repository => {
   const read = fp => {
     try {
       return fs.readFileSync(path.join(repository, fp))
@@ -132,7 +159,7 @@ const prepareInfo = repository => {
   return {
     pkg,
     manifest,
-    git: prepareGitInfo(repository),
+    git: await prepareGitInfo(repository),
     read
   }
 }
@@ -147,29 +174,57 @@ const checks = [
 
 const trueIfUndefined = res => res === undefined || res
 
-const checkRepository = repository => {
-  const info = prepareInfo(repository)
-  console.log(`Checking ${repository}`)
-  checks.forEach(check => {
+class BufferLogger {
+  constructor() {
+    this.logs = []
+  }
+  log(...args) {
+    this.logs.push(['debug', ...args])
+  }
+  warn(...args) {
+    this.logs.push(['warn', ...args])
+  }
+  info(...args) {
+    this.logs.push(['info', ...args])
+  }
+  flush() {
+    for (let msg of this.logs) {
+      console[msg[0] == 'debug' ? 'log' : msg[0]].apply(console, msg.slice(1))
+    }
+    this.logs.splice(0, this.logs.length) // empty the logs
+  }
+}
+
+const checkRepository = async repository => {
+  const logger = new BufferLogger()
+  const info = await prepareInfo(repository)
+  logger.log(`Checking ${repository}`)
+  for (let check of checks) {
     const res = { warnings: [] }
     const assert = mkAssert(res)
-    const ok = trueIfUndefined(check.fn(info, assert))
-    console.log(check.message, ok && res.warnings.length === 0 ? '✅' : '❌')
+    const ok = trueIfUndefined(await check.fn(info, assert))
+    logger.log(check.message, ok && res.warnings.length === 0 ? '✅' : '❌')
     if (res.warnings.length > 0) {
       for (let warning of res.warnings) {
-        console.warn(' - ', warning, '❌')
+        logger.warn(' - ', warning, '❌')
       }
     }
     info.warnings = []
-  })
-  console.log()
+  }
+  logger.log()
+  logger.flush()
 }
 
-const checkRepositories = repositories => {
-  repositories.forEach(checkRepository)
+const checkRepositories = async repositories => {
+  for (let repository of repositories) {
+    try {
+      checkRepository(repository)
+    } catch (e) {
+      console.warn(e)
+    }
+  }
 }
 
 export default function(options) {
-  console.log(options.repositories)
   checkRepositories(options.repositories)
 }
