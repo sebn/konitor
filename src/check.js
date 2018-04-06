@@ -128,6 +128,7 @@ const trueIfUndefined = res => res === undefined || res
 export default function(options) {
   const repository = options.repository
   const info = prepareInfo(repository)
+  console.log(`Checking ${repository}`)
   checks.forEach(check => {
     const res = { warnings: [] }
     const assert = mkAssert(res)
