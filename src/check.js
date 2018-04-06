@@ -5,7 +5,7 @@ import { execSync } from 'child_process'
 
 const lintedByEslintPrettier = {
   fn: (info, assert) => {
-    const eslintConfig = info.pkg.eslintConfig
+    const eslintConfig = info.pkg && info.pkg.eslintConfig
     assert(
       eslintConfig && eslintConfig.extends.indexOf('prettier') > -1,
       'eslintConfig should extend from prettier'
@@ -17,7 +17,7 @@ const lintedByEslintPrettier = {
 
 const hasFieldsInManifest = {
   fn: info => {
-    const fields = info.manifest.fields
+    const fields = info.manifest && info.manifest.fields
     return Boolean(fields)
   },
   message: 'Fields (necessary for login) are defined in manifest.konnector'
@@ -94,12 +94,20 @@ const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
 const prepareGitInfo = repository => {
   const workingDir = path.join(process.cwd(), repository)
-  const branches = execSync('git branch -r', {
-    cwd: workingDir
-  })
-    .toString()
-    .split('\n')
-    .map(line => strip(line))
+  let res
+  try {
+    res = execSync('git branch -r', {
+      cwd: workingDir
+    })
+  } catch (e) {
+    res = {}
+  }
+  const branches = res
+    ? res
+        .toString()
+        .split('\n')
+        .map(line => strip(line))
+    : []
   return {
     branches: branches
   }
@@ -112,15 +120,20 @@ const mkAssert = res => (assertion, warning) => {
 }
 
 const prepareInfo = repository => {
-  const pkgFile = path.join(repository, 'package.json')
-  const pkg = JSON.parse(fs.readFileSync(pkgFile))
-  const manifestFile = path.join(repository, 'manifest.konnector')
-  const manifest = JSON.parse(fs.readFileSync(manifestFile))
+  const read = fp => {
+    try {
+      return fs.readFileSync(path.join(repository, fp))
+    } catch (e) {
+      return null
+    }
+  }
+  const pkg = JSON.parse(read('package.json'))
+  const manifest = JSON.parse(read('manifest.konnector'))
   return {
     pkg,
     manifest,
     git: prepareGitInfo(repository),
-    read: fp => fs.readFileSync(path.join(repository, fp))
+    read
   }
 }
 
@@ -134,8 +147,7 @@ const checks = [
 
 const trueIfUndefined = res => res === undefined || res
 
-export default function(options) {
-  const repository = options.repository
+const checkRepository = repository => {
   const info = prepareInfo(repository)
   console.log(`Checking ${repository}`)
   checks.forEach(check => {
@@ -150,4 +162,14 @@ export default function(options) {
     }
     info.warnings = []
   })
+  console.log()
+}
+
+const checkRepositories = repositories => {
+  repositories.forEach(checkRepository)
+}
+
+export default function(options) {
+  console.log(options.repositories)
+  checkRepositories(options.repositories)
 }
