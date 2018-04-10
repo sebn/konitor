@@ -7,10 +7,10 @@ import { setInteractive } from './helpers/interactive'
 import { pulls } from './pulls'
 import { testKonnector } from './test'
 import { getKonnector, getKonnectorFromPath, getKonnectors } from './list'
+import checkGuidelines from './check'
 
 // simple-git supposes that git is in english or else won't work
 process.env.LANG = 'en'
-displayLogo()
 
 yargs // eslint-disable-line no-unused-expressions
   .version(version)
@@ -19,6 +19,7 @@ yargs // eslint-disable-line no-unused-expressions
     command: 'pulls',
     desc: 'Pull all konnectors',
     handler: async () => {
+      displayLogo()
       console.log(`Pull all konnectors:\n`)
       const konnectors = await getKonnectors()
       await pulls(konnectors)
@@ -41,6 +42,7 @@ yargs // eslint-disable-line no-unused-expressions
       }
     },
     handler: async ({ name, config, interactive }) => {
+      displayLogo()
       setInteractive(interactive)
       console.log(`Test konnector ${name}:\n`)
       const konnector = await getKonnector(name)
@@ -65,6 +67,7 @@ yargs // eslint-disable-line no-unused-expressions
       }
     },
     handler: async ({ path, config, interactive }) => {
+      displayLogo()
       setInteractive(interactive)
       if (!isAbsolute(path)) {
         path = resolve(process.cwd(), path)
@@ -81,7 +84,16 @@ yargs // eslint-disable-line no-unused-expressions
     aliases: ['$0'],
     desc: 'Launch interactive mode',
     handler: async () => {
+      displayLogo()
       await interactive()
+    }
+  })
+  .command({
+    command: 'check <repositories...>',
+    aliases: ['$0'],
+    desc: 'Launch interactive mode',
+    handler: async options => {
+      await checkGuidelines(options)
     }
   })
   .locale('en').argv
