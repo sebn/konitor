@@ -56,7 +56,7 @@ Quit
 
 ## Pulls
 
-> Pulls all konnectors on preference directory
+> Pulls all konnectors into ${XDG_CONFIG_HOME:-~/.config}/configstore/konitor/ 
 
 ### Help
 
