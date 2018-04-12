@@ -13,7 +13,7 @@
 Install `konitor` using yarn.
 
 ```
-$ yarn global add https://github.com/konnectors/konitor.git
+$ yarn global add konitor
 ```
 
 If you cannot execute `konitor` after this command, it may be because you do not
