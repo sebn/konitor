@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.7.0] - 2018-04-12
+### Added
+- Add command to check guidelines programmatically ([#48](https://github.com/konnectors/konitor/pull/48))
+### Fixed
+- Official way to install is now to use the latest published release ([#52](https://github.com/konnectors/konitor/pull/52))
+- Explicit `konitor pulls` destination directory in documentation ([#51](https://github.com/konnectors/konitor/pull/51))
+
 
 ## [v0.6.0] - 2018-04-05
 ### Added
@@ -68,7 +75,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add binary style 🏂
 
 
-[unreleased]: https://github.com/konnectors/konitor/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/konnectors/konitor/compare/v0.7.0...HEAD
+[v0.7.0]: https://github.com/konnectors/konitor/compare/v0.6.0...v0.7.0
 [v0.6.0]: https://github.com/konnectors/konitor/compare/v0.5.3...v0.6.0
 [v0.5.3]: https://github.com/konnectors/konitor/compare/v0.5.2...v0.5.3
 [v0.5.2]: https://github.com/konnectors/konitor/compare/v0.5.1...v0.5.2
