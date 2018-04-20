@@ -73,6 +73,7 @@ const travisUsedToBuildAndDeploy = {
       assert(travis, 'Travis file should be present')
       return false
     }
+
     assert(
       travis.deploy[0].on.branch == 'master',
       'First deployment target should be on branch master'
@@ -105,6 +106,13 @@ const travisUsedToBuildAndDeploy = {
       travis.deploy[2].script.match(/cozyPublish/),
       'Tags should be deployed to the registry'
     )
+    travis.deploy.forEach(deploy =>
+      assert(
+        deploy.repo === info.git.remote,
+        `Target repository should be ${info.git.remote} and not ${deploy.repo}`
+      )
+    )
+
     return true
   },
   nickname: 'travis',
@@ -154,9 +162,14 @@ const getOriginalRemote = async repository => {
     x => x.indexOf('git@github.com:konnectors/') > -1
   )
   if (originals.length === 0) {
-    return 'origin'
+    return false
   }
-  const originalRemote = originals[0].split('\t')[0]
+  // extract the original remote repository name
+  const originalRemote = originals[0]
+    .split('\t')[1]
+    .split(':')[1]
+    .split(' ')[0]
+    .split('.')[0]
   return originalRemote
 }
 
