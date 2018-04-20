@@ -18,6 +18,38 @@ const lintedByEslintPrettier = {
     'Eslint with prettier is used to lint the code (check for eslintConfig in package.json)'
 }
 
+const mandatoryFieldsInManifest = {
+  fn: (info, assert) => {
+    const mandatoryFields = [
+      'version',
+      'name',
+      'type',
+      'icon',
+      'slug',
+      'source',
+      'editor',
+      'vendor_link',
+      'categories',
+      'fields',
+      'data_types',
+      'permissions',
+      'developer',
+      'langs',
+      'locales'
+    ]
+
+    const missingFields = mandatoryFields.filter(field => !info.manifest[field])
+    const result = missingFields.length === 0
+    assert(
+      result,
+      `Some fields are missing in the manifest ${JSON.stringify(missingFields)}`
+    )
+    return result
+  },
+  nickname: 'manifestAttributes',
+  message: 'Mandatory attributes are defined in manifest.konnector'
+}
+
 const hasFieldsInManifest = {
   fn: (info, assert) => {
     const fields = info.manifest && info.manifest.fields
@@ -174,6 +206,7 @@ const prepareInfo = async repository => {
 const checks = [
   lintedByEslintPrettier,
   hasFieldsInManifest,
+  mandatoryFieldsInManifest,
   travisUsedToDeployBuildAndLatest,
   renovateIsConfigured
 ]
