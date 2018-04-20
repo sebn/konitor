@@ -162,13 +162,15 @@ const mkAssert = res => (assertion, warning) => {
 const prepareInfo = async repository => {
   const read = fp => {
     try {
-      return fs.readFileSync(path.join(repository, fp))
+      return JSON.parse(fs.readFileSync(path.join(repository, fp)))
     } catch (e) {
-      return null
+      console.log(e.message)
+      throw new Error(`${fp} file is missing or malformed`)
     }
   }
-  const pkg = JSON.parse(read('package.json'))
-  const manifest = JSON.parse(read('manifest.konnector'))
+  const pkg = read('package.json')
+  const manifest = read('manifest.konnector')
+
   return {
     pkg,
     manifest,
@@ -210,44 +212,57 @@ class BufferLogger {
 
 const checkRepository = async repository => {
   const logger = new BufferLogger()
-  const info = await prepareInfo(repository)
-  logger.log()
-  logger.log(`## Checking ${repository}`)
-  logger.log()
-  for (let check of checks) {
-    const res = { warnings: [] }
-    const assert = mkAssert(res)
-    const ok = trueIfUndefined(await check.fn(info, assert))
-    const failed = !ok || res.warnings.length > 0
-    logger.log('*', check.message, !failed ? '✅' : '❌')
-    if (res.warnings.length > 0) {
-      for (let warning of res.warnings) {
-        logger.warn('  -', warning, '❌')
+
+  try {
+    const info = await prepareInfo(repository)
+    logger.log()
+    logger.log(`## Checking ${repository}`)
+    logger.log()
+    for (let check of checks) {
+      const res = { warnings: [] }
+      const assert = mkAssert(res)
+      const ok = trueIfUndefined(await check.fn(info, assert))
+      const failed = !ok || res.warnings.length > 0
+      logger.log('*', check.message, !failed ? '✅' : '❌')
+      if (res.warnings.length > 0) {
+        for (let warning of res.warnings) {
+          logger.warn('  -', warning, '❌')
+        }
+      }
+      if (failed && check.link) {
+        logger.log('  Check the documentation: ', check.link)
+      }
+      info.warnings = []
+
+      if (check !== checks[checks.length - 1]) {
+        logger.log()
       }
     }
-    if (failed && check.link) {
-      logger.log('  Check the documentation: ', check.link)
-    }
-    info.warnings = []
-
-    if (check !== checks[checks.length - 1]) {
-      logger.log()
-    }
+    logger.log()
+    logger.flush()
+    return 0
+  } catch (err) {
+    logger.warn(err.message)
+    logger.flush()
+    return 1
   }
-  logger.log()
-  logger.flush()
 }
 
 const checkRepositories = async repositories => {
+  let result = 0
   for (let repository of repositories) {
     try {
-      checkRepository(repository)
+      const check = await checkRepository(repository)
+      if (check > 0) {
+        result = check
+      }
     } catch (e) {
       console.warn(e)
     }
   }
+  return result
 }
 
 export default function(options) {
-  checkRepositories(options.repositories)
+  return checkRepositories(options.repositories)
 }

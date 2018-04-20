@@ -93,7 +93,9 @@ yargs // eslint-disable-line no-unused-expressions
     aliases: ['$0'],
     desc: 'Launch interactive mode',
     handler: async options => {
-      await checkGuidelines(options)
+      const code = await checkGuidelines(options)
+      console.log()
+      process.exit(code)
     }
   })
   .locale('en').argv
