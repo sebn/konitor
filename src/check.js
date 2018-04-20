@@ -84,21 +84,6 @@ const renovateIsConfigured = {
   link: 'https://github.com/konnectors/docs/blob/master/status.md#renovate'
 }
 
-const repoShouldHave4Branches = {
-  fn: (info, assert) => {
-    for (let branch of ['master', 'build', 'latest', 'prod']) {
-      const fullBranch = info.git.remote + '/' + branch
-      assert(
-        info.git.branches.indexOf(fullBranch) > -1,
-        `Repository should have branch ${branch}`
-      )
-    }
-  },
-  nickname: '4branches',
-  message: 'Repository should have 4 branches.',
-  link: 'https://github.com/konnectors/docs/blob/master/status.md#git-branch'
-}
-
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
 const execAsPromise = (cmd, options) => {
@@ -183,8 +168,7 @@ const checks = [
   lintedByEslintPrettier,
   hasFieldsInManifest,
   travisUsedToDeployBuildAndLatest,
-  renovateIsConfigured,
-  repoShouldHave4Branches
+  renovateIsConfigured
 ]
 
 const trueIfUndefined = res => res === undefined || res
@@ -238,7 +222,6 @@ const checkRepository = async repository => {
         logger.log()
       }
     }
-    logger.log()
     logger.flush()
     return 0
   } catch (err) {
