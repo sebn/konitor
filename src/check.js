@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import yaml from 'js-yaml'
 import { exec } from 'child_process'
+import request from 'request-promise'
 
 const lintedByEslintPrettier = {
   fn: (info, assert) => {
@@ -64,54 +65,63 @@ const hasFieldsInManifest = {
 const travisUsedToBuildAndDeploy = {
   fn: (info, assert) => {
     let travis
+    let templateTravis
     try {
       travis = yaml.safeLoad(info.read('.travis.yml'))
-      if (!travis.deploy || travis.deploy.length !== 3) {
-        return false
+      templateTravis = yaml.safeLoad(info.templateTravisConfig)
+      if (
+        !travis.deploy ||
+        travis.deploy.length !== templateTravis.deploy.length
+      ) {
+        return Promise.reject(
+          new Error(
+            `Error: The number of deploy targets (${
+              travis.deploy.length
+            }) should be the same as the template (${
+              templateTravis.deploy.length
+            })`
+          )
+        )
       }
     } catch (e) {
       assert(travis, 'Travis file should be present')
       return false
     }
 
-    assert(
-      travis.deploy[0].on.branch == 'master',
-      'First deployment target should be on branch master'
+    const templateSecure = travis.env.global.filter(val =>
+      templateTravis.env.global.map(v => v.secure).includes(val.secure)
     )
     assert(
-      travis.deploy[0].script.match(/DEPLOY_BRANCH=build/),
-      'Master should be deployed to build branch'
+      templateSecure.length === 0,
+      `No secure key from the connector template`
     )
-    assert(
-      travis.deploy[0].script.match(/cozyPublish/),
-      'Master should be deployed to the registry'
-    )
-    assert(
-      travis.deploy[1].on.branch == 'prod',
-      'Second deployment target should be on branch prod'
-    )
-    assert(
-      travis.deploy[1].script.match(/DEPLOY_BRANCH=latest/),
-      'Prod should be deployed to latest branch'
-    )
-    assert(
-      travis.deploy[2].on.tags == true,
-      'Third deployment target should be on tags'
-    )
-    assert(
-      travis.deploy[2].script.match(/DEPLOY_BRANCH=build/),
-      'Tags should be deployed to build branch'
-    )
-    assert(
-      travis.deploy[2].script.match(/cozyPublish/),
-      'Tags should be deployed to the registry'
-    )
-    travis.deploy.forEach(deploy =>
+
+    const blackList = ['repo']
+    travis.deploy.forEach((deploy, index) => {
+      assert(
+        deepEquals(
+          Object.keys(deploy),
+          Object.keys(templateTravis.deploy[index])
+        ),
+        `${index}: deploy keys should the same as the connector template`
+      )
+
+      Object.keys(deploy)
+        .filter(key => !blackList.includes(key))
+        .forEach(key => {
+          assert(
+            deepEquals(deploy[key], templateTravis.deploy[index][key]),
+            `${index}: deploy values should be the same as the template (but not the repo)`
+          )
+        })
+
       assert(
         deploy.repo === info.git.remote,
-        `Target repository should be ${info.git.remote} and not ${deploy.repo}`
+        `${index}: Target repository should be ${info.git.remote} and not ${
+          deploy.repo
+        }`
       )
-    )
+    })
 
     return true
   },
@@ -158,18 +168,14 @@ const getOriginalRemote = async repository => {
   const remotes = (await execAsPromise('git remote -v', {
     cwd: workingDir
   })).split('\n')
-  const originals = remotes.filter(
-    x => x.indexOf('git@github.com:konnectors/') > -1
-  )
+  const originals = remotes.filter(x => x.indexOf('konnectors/') > -1)
   if (originals.length === 0) {
     return false
   }
   // extract the original remote repository name
   const originalRemote = originals[0]
-    .split('\t')[1]
-    .split(':')[1]
-    .split(' ')[0]
-    .split('.')[0]
+    .match(/github.com.(.*)\s/)[1]
+    .split('.git')[0]
   return originalRemote
 }
 
@@ -186,6 +192,7 @@ const prepareGitInfo = async repository => {
   } catch (e) {
     res = {}
   }
+
   const branches = res
     ? res
         .toString()
@@ -223,9 +230,15 @@ const prepareInfo = async repository => {
   const pkg = readJSON('package.json')
   const manifest = readJSON('manifest.konnector')
 
+  // fetch template repository travis secure keys
+  const templateTravisConfig = await request(
+    'https://raw.githubusercontent.com/konnectors/cozy-konnector-template/master/.travis.yml'
+  )
+
   return {
     pkg,
     manifest,
+    templateTravisConfig,
     git: await prepareGitInfo(repository),
     read
   }
@@ -312,6 +325,10 @@ const checkRepositories = async repositories => {
     }
   }
   return result
+}
+
+function deepEquals(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b)
 }
 
 export default function(options) {
