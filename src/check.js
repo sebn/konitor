@@ -61,12 +61,12 @@ const hasFieldsInManifest = {
   message: 'Fields (necessary for login) are defined in manifest.konnector'
 }
 
-const travisUsedToDeployBuildAndLatest = {
+const travisUsedToBuildAndDeploy = {
   fn: (info, assert) => {
     let travis
     try {
       travis = yaml.safeLoad(info.read('.travis.yml'))
-      if (!travis.deploy || travis.deploy.length !== 2) {
+      if (!travis.deploy || travis.deploy.length !== 3) {
         return false
       }
     } catch (e) {
@@ -78,22 +78,37 @@ const travisUsedToDeployBuildAndLatest = {
       'First deployment target should be on branch master'
     )
     assert(
-      travis.deploy[0].script == 'yarn deploy',
+      travis.deploy[0].script.match(/DEPLOY_BRANCH=build/),
       'Master should be deployed to build branch'
     )
     assert(
-      travis.deploy[1].on.branch == 'prod',
-      'First deployment target should be on branch prod'
+      travis.deploy[0].script.match(/cozyPublish/),
+      'Master should be deployed to the registry'
     )
     assert(
-      travis.deploy[1].script == 'yarn deploy:prod' ||
-        travis.deploy[1].script == 'DEPLOY_BRANCH=latest yarn deploy',
+      travis.deploy[1].on.branch == 'prod',
+      'Second deployment target should be on branch prod'
+    )
+    assert(
+      travis.deploy[1].script.match(/DEPLOY_BRANCH=latest/),
       'Prod should be deployed to latest branch'
+    )
+    assert(
+      travis.deploy[2].on.tags == true,
+      'Third deployment target should be on tags'
+    )
+    assert(
+      travis.deploy[2].script.match(/DEPLOY_BRANCH=build/),
+      'Tags should be deployed to build branch'
+    )
+    assert(
+      travis.deploy[2].script.match(/cozyPublish/),
+      'Tags should be deployed to the registry'
     )
     return true
   },
   nickname: 'travis',
-  message: 'Travis is correctly configured to deploy master/prod.',
+  message: 'Travis is correctly configured to deploy master to the registry',
   link: 'https://github.com/konnectors/docs/blob/master/status.md#auto-build'
 }
 
@@ -207,7 +222,7 @@ const checks = [
   lintedByEslintPrettier,
   hasFieldsInManifest,
   mandatoryFieldsInManifest,
-  travisUsedToDeployBuildAndLatest,
+  travisUsedToBuildAndDeploy,
   renovateIsConfigured
 ]
 
