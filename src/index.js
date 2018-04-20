@@ -94,7 +94,6 @@ yargs // eslint-disable-line no-unused-expressions
     desc: 'Launch interactive mode',
     handler: async options => {
       const code = await checkGuidelines(options)
-      console.log()
       process.exit(code)
     }
   })

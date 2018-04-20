@@ -147,14 +147,21 @@ const mkAssert = res => (assertion, warning) => {
 const prepareInfo = async repository => {
   const read = fp => {
     try {
-      return JSON.parse(fs.readFileSync(path.join(repository, fp)))
+      return fs.readFileSync(path.join(repository, fp))
     } catch (e) {
-      console.log(e.message)
-      throw new Error(`${fp} file is missing or malformed`)
+      throw new Error(`${fp} file is missing`)
     }
   }
-  const pkg = read('package.json')
-  const manifest = read('manifest.konnector')
+  const readJSON = fp => {
+    const fileContent = read(fp)
+    try {
+      return JSON.parse(fileContent)
+    } catch (e) {
+      throw new Error(`${fp} file malformed`)
+    }
+  }
+  const pkg = readJSON('package.json')
+  const manifest = readJSON('manifest.konnector')
 
   return {
     pkg,
