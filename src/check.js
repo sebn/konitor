@@ -43,7 +43,7 @@ const mandatoryFieldsInManifest = {
     const result = missingFields.length === 0
     assert(
       result,
-      `Some fields are missing in the manifest ${JSON.stringify(missingFields)}`
+      `Some fields are missing in the manifest ${missingFields.join(', ')}`
     )
     return result
   },
@@ -214,7 +214,7 @@ const mkAssert = res => (assertion, warning) => {
 const prepareInfo = async repository => {
   const read = fp => {
     try {
-      return fs.readFileSync(path.join(repository, fp))
+      return fs.readFileSync(path.join(repository, fp), 'utf-8')
     } catch (e) {
       throw new Error(`${fp} file is missing`)
     }
@@ -283,6 +283,7 @@ const checkRepository = async repository => {
     logger.log()
     logger.log(`## Checking ${repository}`)
     logger.log()
+    let result = true
     for (let check of checks) {
       const res = { warnings: [] }
       const assert = mkAssert(res)
@@ -302,9 +303,12 @@ const checkRepository = async repository => {
       if (check !== checks[checks.length - 1]) {
         logger.log()
       }
+
+      if (failed) result = false
     }
+
     logger.flush()
-    return 0
+    return result ? 0 : 1
   } catch (err) {
     logger.warn(err.message)
     logger.flush()
