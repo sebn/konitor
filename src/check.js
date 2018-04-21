@@ -39,7 +39,9 @@ const mandatoryFieldsInManifest = {
       'locales'
     ]
 
-    const missingFields = mandatoryFields.filter(field => !info.manifest[field])
+    const missingFields = mandatoryFields.filter(
+      field => !info.manifest[field] !== undefined
+    )
     const result = missingFields.length === 0
     assert(
       result,
@@ -183,6 +185,22 @@ const manifestAndPackageJsonSameVersion = {
     'The versions in the manifest and the package.json should be the same'
 }
 
+const connectorExistsInRegistry = {
+  fn: (info, assert) => {
+    assert(
+      info.applicationsInRegistry.data.find(
+        app => app.slug === info.manifest.slug
+      ) !== undefined,
+      `The connector with the slug ${
+        info.manifest.slug
+      } should exist in the registry`
+    )
+    return true
+  },
+  nickname: 'registry',
+  message: 'The connector must exist in the registry'
+}
+
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
 const execAsPromise = (cmd, options) => {
@@ -270,6 +288,10 @@ const prepareInfo = async repository => {
     'https://raw.githubusercontent.com/konnectors/cozy-konnector-template/master/.travis.yml'
   )
 
+  const applicationsInRegistry = await request({
+    json: true,
+    url: 'https://apps-registry.cozycloud.cc/registry'
+  })
   return {
     repository,
     pkg,
@@ -277,6 +299,7 @@ const prepareInfo = async repository => {
     webpackConfig,
     templateTravisConfig,
     git: await prepareGitInfo(repository),
+    applicationsInRegistry,
     read
   }
 }
@@ -288,7 +311,8 @@ const checks = [
   travisUsedToBuildAndDeploy,
   renovateIsConfigured,
   assetsDirIsConfigured,
-  manifestAndPackageJsonSameVersion
+  manifestAndPackageJsonSameVersion,
+  connectorExistsInRegistry
 ]
 
 const trueIfUndefined = res => res === undefined || res
