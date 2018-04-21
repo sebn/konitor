@@ -149,6 +149,27 @@ const renovateIsConfigured = {
   link: 'https://github.com/konnectors/docs/blob/master/status.md#renovate'
 }
 
+const assetsDirIsConfigured = {
+  fn: (info, assert) => {
+    assert(
+      fs.existsSync(path.join(info.repository, 'assets')),
+      'The assets directory should exist'
+    )
+    assert(
+      info.webpackConfig.indexOf(`from: 'assets'`) > -1,
+      'The assets directory should be configured in webpack'
+    )
+    const iconPath = path.join(info.repository, 'assets', info.manifest.icon)
+    assert(
+      fs.existsSync(iconPath),
+      `The icon specified in the manifest should exist : ${iconPath}`
+    )
+    return true
+  },
+  nickname: 'assets',
+  message: 'The ./assets directory should exist and be configured in webpack'
+}
+
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
 const execAsPromise = (cmd, options) => {
@@ -229,6 +250,7 @@ const prepareInfo = async repository => {
   }
   const pkg = readJSON('package.json')
   const manifest = readJSON('manifest.konnector')
+  const webpackConfig = read('webpack.config.js')
 
   // fetch template repository travis secure keys
   const templateTravisConfig = await request(
@@ -236,8 +258,10 @@ const prepareInfo = async repository => {
   )
 
   return {
+    repository,
     pkg,
     manifest,
+    webpackConfig,
     templateTravisConfig,
     git: await prepareGitInfo(repository),
     read
@@ -249,7 +273,8 @@ const checks = [
   hasFieldsInManifest,
   mandatoryFieldsInManifest,
   travisUsedToBuildAndDeploy,
-  renovateIsConfigured
+  renovateIsConfigured,
+  assetsDirIsConfigured
 ]
 
 const trueIfUndefined = res => res === undefined || res
