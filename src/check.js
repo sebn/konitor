@@ -170,6 +170,19 @@ const assetsDirIsConfigured = {
   message: 'The ./assets directory should exist and be configured in webpack'
 }
 
+const manifestAndPackageJsonSameVersion = {
+  fn: (info, assert) => {
+    assert(
+      info.manifest.version === info.pkg.version,
+      `${info.manifest.version} is different from ${info.pkg.version}`
+    )
+    return true
+  },
+  nickname: 'versions',
+  message:
+    'The versions in the manifest and the package.json should be the same'
+}
+
 const strip = str => str.replace(/^\s+/, '').replace(/\s+$/, '')
 
 const execAsPromise = (cmd, options) => {
@@ -274,7 +287,8 @@ const checks = [
   mandatoryFieldsInManifest,
   travisUsedToBuildAndDeploy,
   renovateIsConfigured,
-  assetsDirIsConfigured
+  assetsDirIsConfigured,
+  manifestAndPackageJsonSameVersion
 ]
 
 const trueIfUndefined = res => res === undefined || res
