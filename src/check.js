@@ -40,7 +40,7 @@ const mandatoryFieldsInManifest = {
     ]
 
     const missingFields = mandatoryFields.filter(
-      field => !info.manifest[field] !== undefined
+      field => info.manifest[field] === undefined
     )
     const result = missingFields.length === 0
     assert(
