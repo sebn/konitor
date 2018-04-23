@@ -27,7 +27,6 @@
   "https://github.com/konnectors/cozy-konnector-nef",
   "https://github.com/konnectors/cozy-konnector-numericable",
   "https://github.com/konnectors/cozy-konnector-orange",
-  "https://github.com/konnectors/cozy-konnector-orangemobile",
   "https://github.com/konnectors/cozy-konnector-pajemploi",
   "https://github.com/konnectors/cozy-konnector-payfit",
   "https://github.com/konnectors/cozy-konnector-sncf",
@@ -37,6 +36,5 @@
   "https://github.com/konnectors/cozy-konnector-trainline",
   "https://github.com/konnectors/darty",
   "https://github.com/konnectors/impots",
-  "https://github.com/nicofrand/cozy-konnector-materielnet",
-  "https://gitlab.cozycloud.cc/labs/cozy-konnector-edf"
+  "https://github.com/nicofrand/cozy-konnector-materielnet"
 ]
