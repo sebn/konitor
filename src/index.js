@@ -89,8 +89,8 @@ yargs // eslint-disable-line no-unused-expressions
     }
   })
   .command({
-    command: 'check <repositories...>',
-    desc: 'Launch interactive mode',
+    command: 'check <path>',
+    desc: 'Do some prepublish test on local repo',
     handler: async options => {
       const code = await checkGuidelines(options)
       process.exit(code)
