@@ -67,9 +67,11 @@ export const testKonnector = async (config, konnector) => {
   )
 
   // Test
+  let failed = false
   if (result.code === 0) {
     console.log(` - ✅  Correctly executed.`)
   } else {
+    failed = true
     console.log(` - ⚠️  Finished with error.`)
   }
   if (
@@ -78,12 +80,14 @@ export const testKonnector = async (config, konnector) => {
   ) {
     console.log(` - ✅  Correctly logged in.`)
   } else {
+    failed = true
     console.log(` - ⚠️  Login failed.`)
   }
   const files = await getFilesFromDir(path, 'PDF')
   if (files.length > 0) {
     console.log(` - ✅  PDF is imported.`)
   } else {
+    failed = true
     console.log(` - ⚠️  No PDF.`)
   }
 
@@ -91,6 +95,13 @@ export const testKonnector = async (config, konnector) => {
   if (hasCleanCmd) {
     await launchCmd(path, ['clean'], `Clean repository, please wait...`)
     console.log(` - ✅  repository is clean.`)
+  }
+
+  // Show conector's output on failure
+  if (failed) {
+    console.log('\n--------------------------------------------------\n')
+    console.log(result.stdout.join(''))
+    console.log('\n--------------------------------------------------\n')
   }
 
   return result.code
